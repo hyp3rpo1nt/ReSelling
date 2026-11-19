@@ -1,0 +1,2124 @@
+<!DOCTYPE html>
+<html lang="pl" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RESELL VAULT PRO | Elitarny Panel Resellera</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'monospace'],
+                    },
+                    colors: {
+                        obsidian: '#09090b',
+                        cardbg: '#121216',
+                        emeraldNeon: '#10b981',
+                        violetNeon: '#8b5cf6',
+                        goldNeon: '#f59e0b',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Cyber-Luxury & Dark Neon Custom Styles */
+        body {
+            background-color: #09090b;
+            color: #f4f4f5;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Ambient Animated Orbs */
+        .ambient-orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(110px);
+            z-index: 0;
+            pointer-events: none;
+            animation: floatOrb 14s ease-in-out infinite alternate;
+        }
+        @keyframes floatOrb {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(40px, -30px) scale(1.12); }
+        }
+
+        /* Glassmorphism Cards */
+        .glass-panel {
+            background: rgba(18, 18, 24, 0.72);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+        }
+
+        .glass-card {
+            background: linear-gradient(145deg, rgba(24, 24, 31, 0.85), rgba(14, 14, 18, 0.92));
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            transition: all 0.28s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .glass-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(16, 185, 129, 0.45);
+            box-shadow: 0 12px 30px -10px rgba(16, 185, 129, 0.22);
+        }
+
+        /* Shake Animation for Wrong Password */
+        @keyframes shakeError {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-10px); }
+            40%, 80% { transform: translateX(10px); }
+        }
+        .animate-shake {
+            animation: shakeError 0.42s ease-in-out;
+        }
+
+        /* Smooth Fade & Slide Tab Transition */
+        @keyframes tabEnter {
+            from {
+                opacity: 0;
+                transform: translateY(14px) scale(0.99);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        .tab-animate {
+            animation: tabEnter 0.38s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        /* Unlock Curtain Transition */
+        .lock-exit {
+            opacity: 0;
+            transform: scale(1.06);
+            filter: blur(12px);
+            pointer-events: none;
+            transition: all 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 7px;
+            height: 7px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09090b;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #10b981;
+        }
+
+        /* Neon Glow Text */
+        .text-glow-emerald {
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.45);
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased selection:bg-emerald-500/30 selection:text-emerald-200">
+
+    <!-- Ambient Background Glows -->
+    <div class="ambient-orb w-96 h-96 bg-emerald-500/15 top-[-80px] left-[-80px]"></div>
+    <div class="ambient-orb w-[28rem] h-[28rem] bg-violet-600/15 bottom-[-100px] right-[-80px]" style="animation-delay: -5s;"></div>
+    <div class="ambient-orb w-72 h-72 bg-amber-500/10 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" style="animation-delay: -9s;"></div>
+
+    <!-- Custom Toast Notification Container -->
+    <div id="toastContainer" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2.5 pointer-events-none"></div>
+
+    <!-- =====================================================================
+         1. EKRAN LOGOWANIA (HASŁO: 12345)
+    ====================================================================== -->
+    <section id="loginScreen" class="fixed inset-0 z-40 flex items-center justify-center p-4 bg-[#09090b]/95 backdrop-blur-xl">
+        <div id="loginBox" class="glass-panel w-full max-w-md rounded-3xl p-8 sm:p-10 relative overflow-hidden border border-white/10 shadow-2xl">
+            <!-- Top Accent Line -->
+            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-violet-500 to-amber-500"></div>
+
+            <div class="flex flex-col items-center text-center">
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-emerald-500/20 to-violet-500/20 border border-emerald-500/40 flex items-center justify-center mb-5 shadow-lg shadow-emerald-500/10">
+                    <i class="fa-solid fa-vault text-2xl text-emerald-400"></i>
+                </div>
+
+                <span class="px-3 py-1 rounded-full text-xs font-mono uppercase tracking-widest bg-emerald-500/10 text-emerald-400 border border-emerald-500/25 mb-3">
+                    Strefa VIP • Dostęp Chroniony
+                </span>
+
+                <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white mb-2">
+                    RESELL <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-violet-400">VAULT PRO</span>
+                </h1>
+                <p class="text-sm text-zinc-400 mb-7">
+                    Wprowadź kod dostępu, aby odblokować bazę 50 opłacalnych produktów, kalkulator marży i narzędzia resellera.
+                </p>
+
+                <div class="w-full space-y-4">
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500">
+                            <i class="fa-solid fa-key"></i>
+                        </div>
+                        <input
+                            type="password"
+                            id="passwordInput"
+                            placeholder="Wpisz hasło dostępu..."
+                            autocomplete="off"
+                            class="w-full pl-11 pr-12 py-3.5 rounded-2xl bg-zinc-900/90 border border-zinc-700/80 text-white font-mono tracking-widest text-center text-lg focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/25 transition-all"
+                        >
+                        <button type="button" id="togglePassVisibility" class="absolute inset-y-0 right-0 pr-4 flex items-center text-zinc-500 hover:text-zinc-300 transition-colors" title="Pokaż/ukryj hasło">
+                            <i class="fa-regular fa-eye"></i>
+                        </button>
+                    </div>
+
+                    <p id="loginErrorMsg" class="hidden text-xs font-medium text-rose-400 bg-rose-500/10 border border-rose-500/25 rounded-xl py-2 px-3">
+                        <i class="fa-solid fa-circle-exclamation mr-1.5"></i> Nieprawidłowe hasło! Spróbuj ponownie.
+                    </p>
+
+                    <button
+                        id="loginBtn"
+                        class="w-full py-3.5 px-6 rounded-2xl font-bold text-zinc-950 bg-gradient-to-r from-emerald-400 to-emerald-500 hover:from-emerald-300 hover:to-emerald-400 active:scale-[0.98] transition-all shadow-lg shadow-emerald-500/25 flex items-center justify-center gap-2 cursor-pointer"
+                    >
+                        <span>Odblokuj Panel</span>
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="mt-6 pt-5 border-t border-white/5 w-full flex items-center justify-between text-xs text-zinc-500">
+                <div class="mt-6 pt-5 border-t border-white/5 w-full flex items-center justify-center text-xs text-zinc-500">
+                    <span><i class="fa-solid fa-shield-halved text-emerald-500 mr-1.5"></i> Szyfrowana sesja dostępu</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- =====================================================================
+         2. GŁÓWNY PANEL APLIKACJI (PO ZALOGOWANIU)
+    ====================================================================== -->
+    <div id="mainApp" class="hidden relative z-10 min-h-screen flex flex-col">
+
+        <!-- Top Sticky Navbar -->
+        <header class="sticky top-0 z-30 glass-panel border-b border-white/10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
+                <!-- Brand -->
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-violet-600 flex items-center justify-center text-zinc-950 font-black text-lg shadow-lg shadow-emerald-500/20">
+                        RV
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-extrabold text-base sm:text-lg tracking-tight text-white">RESELL VAULT</span>
+                            <span class="px-2 py-0.5 text-[10px] font-mono font-bold uppercase rounded-md bg-amber-500/15 text-amber-400 border border-amber-500/30">PRO</span>
+                        </div>
+                        <p class="text-[11px] text-zinc-400 hidden sm:block">Centrum Zysku • Perfumy • Streetwear • Elektronika</p>
+                    </div>
+                </div>
+
+                <!-- Live Market Ticker (Desktop) -->
+                <div class="hidden lg:flex items-center gap-6 px-4 py-2 rounded-2xl bg-zinc-900/80 border border-white/5 text-xs font-mono">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span class="text-zinc-400">Baza okazji:</span>
+                        <span class="text-emerald-400 font-bold">800 produktów</span>
+                    </div>
+                    <div class="h-3 w-[1px] bg-zinc-800"></div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-zinc-400">Śr. ROI bazy:</span>
+                        <span id="headerAvgRoi" class="text-amber-400 font-bold">+64%</span>
+                    </div>
+                </div>
+
+                <!-- Logout Button -->
+                <button
+                    id="logoutBtn"
+                    class="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-rose-500/15 text-zinc-300 hover:text-rose-400 border border-zinc-800 hover:border-rose-500/30 text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer"
+                >
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Wyloguj</span>
+                </button>
+            </div>
+
+            <!-- Navigation Tabs Bar -->
+            <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-3 pt-1 overflow-x-auto no-scrollbar">
+                <div class="flex items-center gap-2 min-w-max">
+                    <button data-tab="catalog" class="nav-tab active-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 cursor-pointer bg-emerald-500 text-zinc-950 shadow-lg shadow-emerald-500/20">
+                        <i class="fa-solid fa-fire-flame-curved"></i>
+                        <span>Baza 800 Produktów</span>
+                    </button>
+                    <button data-tab="wholesale" class="nav-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer text-zinc-400 hover:text-white hover:bg-white/5">
+                        <i class="fa-solid fa-ship text-rose-400"></i>
+                        <span>Chińskie & Hurt (B2B/CN)</span>
+                    </button>
+                    <button data-tab="calculator" class="nav-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer text-zinc-400 hover:text-white hover:bg-white/5">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span>Kalkulator Zysku & Importu</span>
+                    </button>
+                    <button data-tab="guide" class="nav-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer text-zinc-400 hover:text-white hover:bg-white/5">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <span>Poradnik: Jak Zacząć</span>
+                    </button>
+                    <button data-tab="tools" class="nav-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer text-zinc-400 hover:text-white hover:bg-white/5">
+                        <i class="fa-solid fa-wand-magic-sparkles text-violet-400"></i>
+                        <span>Narzędzia AI & Magazyn</span>
+                    </button>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Main Content Container -->
+        <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+
+            <!-- =============================================================
+                 ZAKŁADKA 1: BAZA 800 PRODUKTÓW & STRON DO RESELLU
+            ============================================================== -->
+            <section id="tab-catalog" class="tab-section tab-animate space-y-6">
+                <!-- Hero Stats Banner -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+                    <div class="glass-panel rounded-2xl p-4 sm:p-5 border-l-4 border-l-emerald-500">
+                        <p class="text-xs text-zinc-400 font-medium">Zweryfikowane Produkty</p>
+                        <p class="text-2xl sm:text-3xl font-extrabold font-mono text-white mt-1">800 <span class="text-xs font-sans font-normal text-emerald-400">pozycji</span></p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-4 sm:p-5 border-l-4 border-l-violet-500">
+                        <p class="text-xs text-zinc-400 font-medium">Średni Zysk na Sztuce</p>
+                        <p id="statAvgProfit" class="text-2xl sm:text-3xl font-extrabold font-mono text-emerald-400 mt-1">+265 zł</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-4 sm:p-5 border-l-4 border-l-rose-500">
+                        <p class="text-xs text-zinc-400 font-medium">Import CN & Hurtownie</p>
+                        <p class="text-lg sm:text-xl font-extrabold font-mono text-rose-400 mt-1.5">1688 • Taobao • Merkandi</p>
+                    </div>
+                    <div class="glass-panel rounded-2xl p-4 sm:p-5 border-l-4 border-l-amber-500">
+                        <p class="text-xs text-zinc-400 font-medium">Główne Rynki Zbytu</p>
+                        <p class="text-sm sm:text-base font-bold text-white mt-2">Vinted • OLX • Allegro • StockX</p>
+                    </div>
+                </div>
+
+                <!-- Filters, Search & Sort Bar -->
+                <div class="glass-panel rounded-2xl p-4 sm:p-5 space-y-4">
+                    <div class="flex flex-col lg:flex-row gap-3 justify-between">
+                        <!-- Search Input -->
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500"></i>
+                            <input
+                                type="text"
+                                id="searchInput"
+                                placeholder="Szukaj wśród 800 produktów (np. 1688, Lattafa, Jordan, Paleta, Dyson, Taobao, LEGO)..."
+                                class="w-full pl-11 pr-4 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500 transition-colors"
+                            >
+                        </div>
+
+                        <!-- Source Filter + Sort Select -->
+                        <div class="flex flex-wrap sm:flex-nowrap items-center gap-2">
+                            <select id="sourceFilterSelect" class="px-3.5 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-xs sm:text-sm text-white focus:outline-none focus:border-rose-500 cursor-pointer">
+                                <option value="ALL">Wszystkie źródła</option>
+                                <option value="CN">🇨🇳 Chińskie / Import CN (1688, Taobao, Alibaba)</option>
+                                <option value="HURT">📦 Hurtownie EU & Palety (Merkandi, BigBuy)</option>
+                                <option value="RETAIL">🏪 Sklepy & Dropy (Notino, Zalando, SNKRS)</option>
+                            </select>
+
+                            <select id="sortSelect" class="px-3.5 py-3 rounded-xl bg-zinc-900/90 border border-zinc-800 text-xs sm:text-sm text-white focus:outline-none focus:border-emerald-500 cursor-pointer">
+                                <option value="default">Domyślnie (1 - 800)</option>
+                                <option value="profitDesc">Największy zysk (PLN)</option>
+                                <option value="roiDesc">Najwyższy zwrot (% ROI)</option>
+                                <option value="buyAsc">Najniższa cena zakupu</option>
+                                <option value="nameAsc">Alfabetycznie (A - Z)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Category Filter Pills -->
+                    <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+                        <div class="flex flex-wrap gap-2" id="categoryFilters">
+                            <button data-cat="ALL" class="cat-btn active px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 transition-all cursor-pointer">
+                                Wszystkie (800)
+                            </button>
+                            <button data-cat="Perfumy" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition-all cursor-pointer">
+                                <i class="fa-solid fa-spray-can-sparkles text-violet-400 mr-1"></i> Perfumy (200)
+                            </button>
+                            <button data-cat="Ubrania i Sneakersy" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition-all cursor-pointer">
+                                <i class="fa-solid fa-shirt text-emerald-400 mr-1"></i> Ciuchy & Buty (200)
+                            </button>
+                            <button data-cat="Elektronika" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition-all cursor-pointer">
+                                <i class="fa-solid fa-microchip text-cyan-400 mr-1"></i> Elektronika (160)
+                            </button>
+                            <button data-cat="Hurt i Palety" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition-all cursor-pointer">
+                                <i class="fa-solid fa-boxes-packing text-rose-400 mr-1"></i> Hurt & Palety (120)
+                            </button>
+                            <button data-cat="Inne i Kolekcje" class="cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition-all cursor-pointer">
+                                <i class="fa-solid fa-gem text-amber-400 mr-1"></i> Inne & Kolekcje (120)
+                            </button>
+                        </div>
+
+                        <span id="resultsCount" class="text-xs font-mono text-zinc-400">Wyświetlono: 24 z 800</span>
+                    </div>
+                </div>
+
+                <!-- Products Grid (Paginated 24 per page for instant performance) -->
+                <div id="productsGrid" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-5">
+                    <!-- Dynamicznie renderowane karty produktów -->
+                </div>
+
+                <!-- Pagination Controls -->
+                <div id="paginationBar" class="glass-panel rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="text-xs text-zinc-400 font-mono" id="pageInfoText">
+                        Strona 1 z 34 (Pozycje 1 - 24)
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <button id="firstPageBtn" class="px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 disabled:opacity-40 border border-zinc-800 text-xs font-bold text-zinc-300 cursor-pointer" title="Pierwsza strona">
+                            <i class="fa-solid fa-angles-left"></i>
+                        </button>
+                        <button id="prevPageBtn" class="px-3.5 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 disabled:opacity-40 border border-zinc-800 text-xs font-bold text-white cursor-pointer flex items-center gap-1.5">
+                            <i class="fa-solid fa-chevron-left"></i> Poprzednia
+                        </button>
+
+                        <div class="flex items-center gap-1.5 px-2">
+                            <span class="text-xs text-zinc-400">Idź do:</span>
+                            <input type="number" id="jumpPageInput" min="1" max="34" value="1" class="w-14 py-1.5 px-2 rounded-lg bg-zinc-950 border border-zinc-700 text-center font-mono text-xs text-white focus:outline-none focus:border-emerald-500">
+                        </div>
+
+                        <button id="nextPageBtn" class="px-3.5 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 text-xs font-bold text-zinc-950 cursor-pointer flex items-center gap-1.5">
+                            Następna <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                        <button id="lastPageBtn" class="px-3 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 disabled:opacity-40 border border-zinc-800 text-xs font-bold text-zinc-300 cursor-pointer" title="Ostatnia strona">
+                            <i class="fa-solid fa-angles-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =============================================================
+                 ZAKŁADKA 2: CHIŃSKIE PLATFORMY & HURTOWNIE B2B (NOWA!)
+            ============================================================== -->
+            <section id="tab-wholesale" class="tab-section hidden space-y-6">
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-rose-500/20">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-white/10">
+                        <div>
+                            <span class="text-xs font-mono uppercase tracking-widest text-rose-400">Import Azja & Hurtownie Europejskie</span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Chińskie Platformy & Baza Hurtowa B2B</h2>
+                            <p class="text-sm text-zinc-400 mt-1 max-w-3xl">
+                                Zestawienie najlepszych portali do zamawiania towaru w cenach fabrycznych (CN) oraz palet/pakietów hurtowych w Europie bez pośredników.
+                            </p>
+                        </div>
+                        <button onclick="filterByChineseAndGo()" class="self-start px-4 py-2.5 rounded-xl bg-rose-500 hover:bg-rose-400 text-white font-bold text-xs shadow-lg shadow-rose-500/20 transition-all cursor-pointer flex items-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass"></i> Pokaż produkty z Chin w bazie
+                        </button>
+                    </div>
+
+                    <!-- Platforms Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-6">
+                        <!-- 1688.com -->
+                        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30">🇨🇳 Chiny • Fabryki</span>
+                                    <span class="text-xs font-mono text-zinc-400">MOQ: 2–10 szt.</span>
+                                </div>
+                                <h3 class="text-lg font-extrabold text-white">1688.com (Alibaba Domestic)</h3>
+                                <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                                    Najtańsza platforma hurtowa w Chinach przeznaczona na rynek wewnętrzny (ceny w juanach CNY). Ceny są tu często <strong class="text-emerald-400">o 40–60% niższe niż na AliExpress</strong>. Idealna pod akcesoria, elektronikę, zegarki, etui i odzież no-name.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 space-y-2">
+                                <p class="text-[11px] text-amber-300"><i class="fa-solid fa-circle-info mr-1"></i> Wymaga agenta (np. CSSBuy, Superbuy, CNFans) lub tłumacza w Chrome.</p>
+                                <a href="https://www.1688.com" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-zinc-900 hover:bg-rose-500/20 text-rose-300 border border-rose-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                                    Otwórz 1688.com <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Alibaba.com -->
+                        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">🇨🇳 Eksport B2B</span>
+                                    <span class="text-xs font-mono text-zinc-400">MOQ: 10–100 szt.</span>
+                                </div>
+                                <h3 class="text-lg font-extrabold text-white">Alibaba.com (Trade Assurance)</h3>
+                                <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                                    Międzynarodowy gigant B2B z ochroną płatności Trade Assurance i fakturami VAT. Możesz zamawiać gotowe bestsellery (np. kubki termiczne, gadżety LED, akcesoria gamingowe) z wysyłką <strong class="text-white">DDP (opłacone cło i VAT)</strong> prosto pod drzwi w Polsce.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 space-y-2">
+                                <p class="text-[11px] text-emerald-300"><i class="fa-solid fa-shield-check mr-1"></i> Szukaj odznak "Verified Supplier" + wysyłka "DDP Air/Train".</p>
+                                <a href="https://www.alibaba.com" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-zinc-900 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                                    Otwórz Alibaba.com <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Taobao & Weidian -->
+                        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-violet-500/15 text-violet-300 border border-violet-500/30">🇨🇳 Streetwear & Nisza</span>
+                                    <span class="text-xs font-mono text-zinc-400">MOQ: 1 szt.</span>
+                                </div>
+                                <h3 class="text-lg font-extrabold text-white">Taobao & Weidian (Przez Agentów)</h3>
+                                <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                                    Kultowe chińskie platformy z limitowanymi edycjami azjatyckimi (Pop Mart Labubu, azjatyckie dropy Nike/Adidas, unikatowe akcesoria streetwear, figurki kolekcjonerskie). Zamawiasz przez agenta, który robi zdjęcia QC przed wysyłką do PL.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 space-y-2">
+                                <p class="text-[11px] text-violet-300"><i class="fa-solid fa-camera mr-1"></i> Zawsze sprawdzaj zdjęcia QC (Quality Check) w magazynie agenta.</p>
+                                <a href="https://www.taobao.com" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-zinc-900 hover:bg-violet-500/20 text-violet-300 border border-violet-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                                    Otwórz Taobao.com <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Merkandi -->
+                        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-emerald-500/15 text-emerald-300 border border-emerald-500/30">🇪🇺 Hurt & Palety EU</span>
+                                    <span class="text-xs font-mono text-zinc-400">Pakiety / Palety</span>
+                                </div>
+                                <h3 class="text-lg font-extrabold text-white">Merkandi.pl (Stoki & Zwroty)</h3>
+                                <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                                    Największa w Europie giełda towarów ze stoków magazynowych, końcówek serii, likwidacji sklepów oraz palet ze zwrotami Amazon/Zalando. Kupujesz markowe ubrania, perfumy i AGD za <strong class="text-emerald-400">15%–35% wartości rynkowej</strong>.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 space-y-2">
+                                <p class="text-[11px] text-zinc-300"><i class="fa-solid fa-truck-fast mr-1"></i> Szybka wysyłka z Polski i Niemiec bez odprawy celnej.</p>
+                                <a href="https://merkandi.pl" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-zinc-900 hover:bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                                    Otwórz Merkandi.pl <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- AliExpress Choice & Business -->
+                        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">🇨🇳 Szybki Start</span>
+                                    <span class="text-xs font-mono text-zinc-400">MOQ: 1–5 szt.</span>
+                                </div>
+                                <h3 class="text-lg font-extrabold text-white">AliExpress Choice & Bundle Deals</h3>
+                                <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                                    Sekcja "Bundle Deals" (3 przedmioty od 1.99$) oraz "SuperDeals" pozwala kupować drobne hity (np. lampki, zegarki cyfrowe, akcesoria do konsol, figurki) z dostawą w 5–7 dni do Paczkomatu i wliczonym VAT-em.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 space-y-2">
+                                <p class="text-[11px] text-cyan-300"><i class="fa-solid fa-bolt mr-1"></i> Idealne do testowania popytu bez mrożenia dużego kapitału.</p>
+                                <a href="https://pl.aliexpress.com" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-zinc-900 hover:bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                                    Otwórz AliExpress <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- BigBuy & B-Stock Europe -->
+                        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-indigo-500/15 text-indigo-300 border border-indigo-500/30">🇪🇺 Hurtownie EU</span>
+                                    <span class="text-xs font-mono text-zinc-400">Hurt / Dropshipping</span>
+                                </div>
+                                <h3 class="text-lg font-extrabold text-white">BigBuy & B-Stock Europe</h3>
+                                <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                                    Europejskie hurtownie oferujące oryginalne perfumy, elektronikę i markowe akcesoria w cenach hurtowych już od pojedynczych kartonów lub licytacji boxów zwrotów konsumenckich klasy A/B.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 space-y-2">
+                                <p class="text-[11px] text-indigo-300"><i class="fa-solid fa-file-invoice mr-1"></i> Pełna dokumentacja pochodzenia towaru w Unii Europejskiej.</p>
+                                <a href="https://www.bigbuy.eu/pl/" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-zinc-900 hover:bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                                    Otwórz BigBuy EU <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Weidian.com -->
+                        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-pink-500/15 text-pink-300 border border-pink-500/30">🇨🇳 Chiny • Weidian</span>
+                                    <span class="text-xs font-mono text-zinc-400">MOQ: 1 szt.</span>
+                                </div>
+                                <h3 class="text-lg font-extrabold text-white">Weidian.com (微店)</h3>
+                                <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                                    Popularna chińska platforma niezależnych sprzedawców i małych fabryk (w juanach CNY). Świetna do zamawiania przez agentów pojedynczych sztuk lub mniejszych partii w niskich cenach.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 space-y-2">
+                                <p class="text-[11px] text-pink-300"><i class="fa-solid fa-link mr-1"></i> Wklejasz link z Weidian u agenta, a on kupuje towar za Ciebie.</p>
+                                <a href="https://weidian.com" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-zinc-900 hover:bg-pink-500/20 text-pink-300 border border-pink-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                                    Otwórz Weidian.com <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- DHgate.com -->
+                        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-orange-500/15 text-orange-300 border border-orange-500/30">🇨🇳 Hurt & Detal</span>
+                                    <span class="text-xs font-mono text-zinc-400">MOQ: 1–10 szt.</span>
+                                </div>
+                                <h3 class="text-lg font-extrabold text-white">DHgate.com</h3>
+                                <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                                    Chiński serwis hurtowo-detaliczny nastawiony na wysyłkę zagraniczną. Ceny spadają przy zamówieniu kilku sztuk tego samego przedmiotu.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 space-y-2">
+                                <p class="text-[11px] text-orange-300"><i class="fa-solid fa-tags mr-1"></i> Sprawdź rabaty ilościowe (Bulk Price) na karcie produktu.</p>
+                                <a href="https://www.dhgate.com" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-zinc-900 hover:bg-orange-500/20 text-orange-300 border border-orange-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                                    Otwórz DHgate.com <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Made-in-China.com -->
+                        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-sky-500/15 text-sky-300 border border-sky-500/30">🇨🇳 Producenci B2B</span>
+                                    <span class="text-xs font-mono text-zinc-400">MOQ: 5–50 szt.</span>
+                                </div>
+                                <h3 class="text-lg font-extrabold text-white">Made-in-China.com</h3>
+                                <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                                    Katalog chińskich producentów i fabryk z elektroniki, akcesoriów, oświetlenia i gadżetów. Dobry kierunek przy większych zamówieniach pod odsprzedaż.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 space-y-2">
+                                <p class="text-[11px] text-sky-300"><i class="fa-solid fa-industry mr-1"></i> Bezpośredni kontakt z fabrykami i dostawcami OEM/ODM.</p>
+                                <a href="https://www.made-in-china.com" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-zinc-900 hover:bg-sky-500/20 text-sky-300 border border-sky-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                                    Otwórz Made-in-China <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- GlobalSources.com -->
+                        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-teal-500/15 text-teal-300 border border-teal-500/30">🇨🇳 Sourcing Azja</span>
+                                    <span class="text-xs font-mono text-zinc-400">Hurt B2B</span>
+                                </div>
+                                <h3 class="text-lg font-extrabold text-white">GlobalSources.com</h3>
+                                <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                                    Platforma B2B łącząca sprzedawców z weryfikowanymi dostawcami z Chin i regionu Azji – szczególnie mocna w elektronice, audio i akcesoriach.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 space-y-2">
+                                <p class="text-[11px] text-teal-300"><i class="fa-solid fa-check-double mr-1"></i> Przydatna do szukania sprawdzonych fabryk elektroniki.</p>
+                                <a href="https://www.globalsources.com" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-zinc-900 hover:bg-teal-500/20 text-teal-300 border border-teal-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                                    Otwórz GlobalSources <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- LightInTheBox.com -->
+                        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-fuchsia-500/15 text-fuchsia-300 border border-fuchsia-500/30">🇨🇳 Zakupy Online</span>
+                                    <span class="text-xs font-mono text-zinc-400">MOQ: 1 szt.</span>
+                                </div>
+                                <h3 class="text-lg font-extrabold text-white">LightInTheBox.com</h3>
+                                <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                                    Chiński sklep wysyłkowy z odzieżą, akcesoriami, oświetleniem i gadżetami domowymi – wygodny przy zamawianiu bez pośrednictwa agenta.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 space-y-2">
+                                <p class="text-[11px] text-fuchsia-300"><i class="fa-solid fa-globe mr-1"></i> Proste zamówienie bezpośrednio do Polski.</p>
+                                <a href="https://www.lightinthebox.com" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-zinc-900 hover:bg-fuchsia-500/20 text-fuchsia-300 border border-fuchsia-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                                    Otwórz LightInTheBox <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Temu.com -->
+                        <div class="glass-card rounded-2xl p-5 flex flex-col justify-between space-y-4">
+                            <div>
+                                <div class="flex items-center justify-between mb-3">
+                                    <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">🇨🇳 Niskie Ceny</span>
+                                    <span class="text-xs font-mono text-zinc-400">MOQ: 1–3 szt.</span>
+                                </div>
+                                <h3 class="text-lg font-extrabold text-white">Temu.com</h3>
+                                <p class="text-xs text-zinc-400 mt-2 leading-relaxed">
+                                    Platforma z bardzo tanimi gadżetami, akcesoriami do domu, biura i sportu. Świetna do szybkiego wyłapywania tanich produktów pod sprzedaż w zestawach.
+                                </p>
+                            </div>
+                            <div class="pt-3 border-t border-white/10 space-y-2">
+                                <p class="text-[11px] text-amber-300"><i class="fa-solid fa-percent mr-1"></i> Łącz kilka tanich sztuk w jeden zestaw na OLX lub Vinted.</p>
+                                <a href="https://www.temu.com" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-zinc-900 hover:bg-amber-500/20 text-amber-300 border border-amber-500/30 text-xs font-bold flex items-center justify-center gap-2 transition-all">
+                                    Otwórz Temu.com <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Import Cheat-Sheet Banner -->
+                    <div class="mt-6 p-5 rounded-2xl bg-gradient-to-r from-rose-500/10 via-zinc-900 to-amber-500/10 border border-rose-500/25 grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <div class="space-y-1">
+                            <strong class="text-rose-400 block text-sm"><i class="fa-solid fa-plane-arrival mr-1.5"></i>1. Wysyłka DDP / Tariff-Free</strong>
+                            <p class="text-zinc-300">Zawsze wybieraj linie lotnicze/kolejowe typu <strong>EU Tax-Free / DDP</strong> – unikasz zatrzymania paczki na cle i dodatkowych opłat.</p>
+                        </div>
+                        <div class="space-y-1">
+                            <strong class="text-amber-400 block text-sm"><i class="fa-solid fa-scale-balanced mr-1.5"></i>2. Nie zamawiaj podróbek!</strong>
+                            <p class="text-zinc-300">Import podrobionych marek grozi konfiskatą towaru przez Służbę Celną i karą finansową. Sprowadzaj produkty no-name lub legalne marki.</p>
+                        </div>
+                        <div class="space-y-1">
+                            <strong class="text-emerald-400 block text-sm"><i class="fa-solid fa-box-open mr-1.5"></i>3. Zawsze zamawiaj 1-2 sztuki próbne</strong>
+                            <p class="text-zinc-300">Zanim kupisz karton 50 sztuk na 1688 lub Alibabie, zamów 2 próbki (sample), sprawdź jakość i przetestuj sprzedaż na OLX/Vinted.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =============================================================
+                 ZAKŁADKA 3: ROZBUDOWANY KALKULATOR ZYSKU, WALUT I HURTU
+            ============================================================== -->
+            <section id="tab-calculator" class="tab-section hidden space-y-6">
+                <div class="glass-panel rounded-3xl p-6 sm:p-8 border border-white/10">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-white/10">
+                        <div>
+                            <span class="text-xs font-mono uppercase tracking-wider text-emerald-400">Narzędzie Analityczne & Importowe</span>
+                            <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Kalkulator Zysku, Walut (CNY/USD) i Hurtem</h2>
+                            <p class="text-sm text-zinc-400 mt-1">Przelicz pojedynczą sztukę lub cały karton hurtowy z Chin/EU z uwzględnieniem kursu walut i prowizji.</p>
+                        </div>
+                        <button id="resetCalcBtn" class="self-start px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-700 text-xs font-semibold text-zinc-300 transition-all cursor-pointer">
+                            <i class="fa-solid fa-rotate-left mr-1.5"></i> Wyczyść pola
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-6">
+                        <!-- Inputs Column -->
+                        <div class="lg:col-span-7 space-y-5">
+                            <div id="calcSelectedProductBanner" class="hidden p-3.5 rounded-2xl bg-violet-500/10 border border-violet-500/30 flex items-center justify-between">
+                                <div class="text-xs">
+                                    <span class="text-violet-300 block">Załadowano produkt z bazy 800:</span>
+                                    <strong id="calcProductName" class="text-white text-sm">Nazwa produktu</strong>
+                                </div>
+                                <span class="px-2.5 py-1 rounded-lg bg-violet-500/20 text-violet-300 font-mono text-xs">Auto-fill</span>
+                            </div>
+
+                            <!-- Currency & Quantity Row -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-2">
+                                        Waluta zakupu u dostawcy
+                                    </label>
+                                    <select id="calcCurrency" class="w-full px-4 py-3 rounded-2xl bg-zinc-900/90 border border-zinc-700 text-white text-sm font-medium focus:outline-none focus:border-emerald-500 cursor-pointer">
+                                        <option value="1">PLN (Polski Złoty - 1.00 zł)</option>
+                                        <option value="0.56">CNY (Chiński Juan 1688/Taobao ≈ 0.56 zł)</option>
+                                        <option value="4.02">USD (Dolar Alibaba/StockX ≈ 4.02 zł)</option>
+                                        <option value="4.32">EUR (Euro Amazon.de/Merkandi ≈ 4.32 zł)</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-2">
+                                        Ilość sztuk (1 = detal, np. 10 = hurt)
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" id="calcQuantity" value="1" min="1" step="1" class="w-full pl-4 pr-14 py-3 rounded-2xl bg-zinc-900/90 border border-zinc-700 text-white font-mono text-base font-bold focus:outline-none focus:border-emerald-500">
+                                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-500">SZT.</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <!-- Cena Zakupu 1 szt. -->
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-2">
+                                        Cena zakupu 1 szt. (<span id="buyCurrencyLabel">PLN</span>)
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" id="calcBuyPrice" value="320" min="0" step="0.5" class="w-full pl-4 pr-14 py-3.5 rounded-2xl bg-zinc-900/90 border border-zinc-700 text-white font-mono text-lg font-bold focus:outline-none focus:border-emerald-500">
+                                        <span id="buyCurrencyBadge" class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-500">PLN</span>
+                                    </div>
+                                </div>
+
+                                <!-- Cena Sprzedaży 1 szt. w PLN -->
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-2">
+                                        Cena sprzedaży 1 szt. w Polsce (PLN)
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" id="calcSellPrice" value="520" min="0" step="1" class="w-full pl-4 pr-12 py-3.5 rounded-2xl bg-zinc-900/90 border border-zinc-700 text-white font-mono text-lg font-bold focus:outline-none focus:border-emerald-500">
+                                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-500">PLN</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <!-- Koszty dodatkowe łączne -->
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-2">
+                                        Łączna wysyłka / cło / opakowania (PLN)
+                                    </label>
+                                    <div class="relative">
+                                        <input type="number" id="calcShippingCost" value="15" min="0" step="1" class="w-full pl-4 pr-12 py-3.5 rounded-2xl bg-zinc-900/90 border border-zinc-700 text-white font-mono text-base focus:outline-none focus:border-emerald-500">
+                                        <span class="absolute right-4 top-1/2 -translate-y-1/2 text-xs font-mono text-zinc-500">PLN</span>
+                                    </div>
+                                </div>
+
+                                <!-- Platforma sprzedażowa -->
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-2">
+                                        Platforma sprzedażowa (Prowizja)
+                                    </label>
+                                    <select id="calcPlatform" class="w-full px-4 py-3.5 rounded-2xl bg-zinc-900/90 border border-zinc-700 text-white text-sm font-medium focus:outline-none focus:border-emerald-500 cursor-pointer">
+                                        <option value="0">Vinted (0% prowizji sprzedającego)</option>
+                                        <option value="0">OLX / Odbiór osobisty (0%)</option>
+                                        <option value="8">Allegro Lokalnie (ok. 8%)</option>
+                                        <option value="10">StockX / Alias (ok. 10%)</option>
+                                        <option value="9">Grailed (9%)</option>
+                                        <option value="13">eBay (ok. 13%)</option>
+                                        <option value="custom">Własna prowizja (%)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Custom Fee Input -->
+                            <div id="customFeeContainer" class="hidden">
+                                <label class="block text-xs font-semibold text-amber-400 mb-2">Wpisz własną stawkę prowizji (%)</label>
+                                <input type="number" id="calcCustomFee" value="5" min="0" max="100" step="0.5" class="w-full px-4 py-3 rounded-2xl bg-zinc-900 border border-amber-500/40 text-white font-mono">
+                            </div>
+                        </div>
+
+                        <!-- Live Results Card -->
+                        <div class="lg:col-span-5">
+                            <div class="h-full rounded-3xl p-6 bg-gradient-to-br from-zinc-900 via-zinc-900 to-emerald-950/30 border border-emerald-500/30 flex flex-col justify-between space-y-6">
+                                <div>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-xs font-mono uppercase tracking-wider text-zinc-400">Łączny Zysk Netto (<span id="resQtyLabel">1 szt.</span>)</span>
+                                        <span id="dealQualityBadge" class="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                                            Świetny Deal!
+                                        </span>
+                                    </div>
+
+                                    <div id="calcNetProfit" class="text-4xl sm:text-5xl font-extrabold font-mono text-emerald-400 text-glow-emerald mt-3">
+                                        +185.00 zł
+                                    </div>
+                                    <p id="calcPerUnitNote" class="text-xs font-mono text-zinc-400 mt-1">Zysk na 1 sztuce: +185.00 zł</p>
+
+                                    <!-- Profitability Visual Bar -->
+                                    <div class="mt-5">
+                                        <div class="flex justify-between text-xs text-zinc-400 mb-1.5">
+                                            <span>Wskaźnik opłacalności (ROI)</span>
+                                            <span id="calcRoiText" class="font-mono font-bold text-white">+55.2%</span>
+                                        </div>
+                                        <div class="w-full h-3 rounded-full bg-zinc-800 overflow-hidden p-0.5">
+                                            <div id="calcProfitBar" class="h-full rounded-full bg-gradient-to-r from-emerald-500 to-teal-300 transition-all duration-500" style="width: 65%;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Detailed Breakdown -->
+                                <div class="space-y-2.5 pt-4 border-t border-white/10 text-sm">
+                                    <div class="flex justify-between text-zinc-400">
+                                        <span>Łączny przychód ze sprzedaży:</span>
+                                        <span id="resGross" class="font-mono text-white">520.00 zł</span>
+                                    </div>
+                                    <div class="flex justify-between text-zinc-400">
+                                        <span>Koszt towaru (w PLN) + wysyłka:</span>
+                                        <span id="resTotalCost" class="font-mono text-zinc-300">-335.00 zł</span>
+                                    </div>
+                                    <div class="flex justify-between text-zinc-400">
+                                        <span>Prowizja platformy:</span>
+                                        <span id="resFeeAmount" class="font-mono text-rose-400">-0.00 zł</span>
+                                    </div>
+                                    <div class="flex justify-between text-zinc-400 pt-2 border-t border-white/5">
+                                        <span>Marża ze sprzedaży:</span>
+                                        <span id="resMargin" class="font-mono font-bold text-amber-400">35.6%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =============================================================
+                 ZAKŁADKA 4: PORADNIK RESELLU KROK PO KROKU
+            ============================================================== -->
+            <section id="tab-guide" class="tab-section hidden space-y-6">
+                <div class="glass-panel rounded-3xl p-6 sm:p-8">
+                    <span class="text-xs font-mono uppercase tracking-widest text-amber-400">Akademia Resellu • Edycja 2026</span>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-white mt-1">Jak Zacząć Zarabiać na Resellu od Zera?</h2>
+                    <p class="text-sm text-zinc-400 mt-2 max-w-3xl">
+                        Kompletna mapa drogowa dla początkujących. Dowiedz się, jak zamienić 300–500 zł kapitału startowego w regularny dodatkowy dochód na perfumach, streetwearze i elektronice.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-8">
+                        <!-- Step 1 -->
+                        <div class="glass-card rounded-2xl p-6 space-y-3">
+                            <div class="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-mono font-bold">
+                                01
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Budżet i Nisza na Start</h3>
+                            <p class="text-sm text-zinc-400 leading-relaxed">
+                                Nie zaczynaj od butów za 2000 zł. Z budżetem <strong class="text-emerald-400">300–600 zł</strong> najlepiej zacząć od <strong class="text-white">perfum arabskich i designerskich</strong> (np. Lattafa, Armaf, JPG) lub akcesoriów (Stanley, Casio). Szybko się obracają i nie mają problemu z rozmiarówką!
+                            </p>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div class="glass-card rounded-2xl p-6 space-y-3">
+                            <div class="w-11 h-11 rounded-xl bg-violet-500/15 border border-violet-500/30 flex items-center justify-center text-violet-400 font-mono font-bold">
+                                02
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Gdzie Polować na Towar?</h3>
+                            <p class="text-sm text-zinc-400 leading-relaxed">
+                                Śledź <strong class="text-white">Pepper.pl</strong> (alerty cenowe na perfumy i elektronikę), nocne dropy na <strong class="text-white">Zalando Lounge</strong> i <strong class="text-white">BestSecret</strong>, kody rabatowe w aplikacjach Notino/Flaconi oraz tzw. <em>Vinted Sniping</em> (świeżo dodane ogłoszenia poniżej ceny rynkowej).
+                            </p>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div class="glass-card rounded-2xl p-6 space-y-3">
+                            <div class="w-11 h-11 rounded-xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 font-mono font-bold">
+                                03
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Legit Check (Zero Podróbek)</h3>
+                            <p class="text-sm text-zinc-400 leading-relaxed">
+                                Zawsze zachowuj dowód zakupu (fakturę/paragon). W perfumach sprawdzaj <strong class="text-white">Batch Code</strong> (np. na CheckFresh), jakość atomizera i zgrzew folii. W ubraniach sprawdzaj szwy, metki wewnętrzne oraz czcionkę na pudełku.
+                            </p>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div class="glass-card rounded-2xl p-6 space-y-3">
+                            <div class="w-11 h-11 rounded-xl bg-cyan-500/15 border border-cyan-500/30 flex items-center justify-center text-cyan-400 font-mono font-bold">
+                                04
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Zdjęcia i Algorytm Vinted/OLX</h3>
+                            <p class="text-sm text-zinc-400 leading-relaxed">
+                                Zdjęcia rób w <strong class="text-white">świetle dziennym</strong> na czystym, estetycznym tle. Pierwsze zdjęcie decyduje o kliknięciu! Wystawiaj ogłoszenia w godzinach szczytu (18:00–21:30) i odświeżaj je co kilka dni, aby utrzymywać wysokie wyświetlenia.
+                            </p>
+                        </div>
+
+                        <!-- Step 5 -->
+                        <div class="glass-card rounded-2xl p-6 space-y-3">
+                            <div class="w-11 h-11 rounded-xl bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400 font-mono font-bold">
+                                05
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Szybka Wysyłka = 5 Gwiazdek</h3>
+                            <p class="text-sm text-zinc-400 leading-relaxed">
+                                Pakuj towar pancernie (folia bąbelkowa przy perfumach to absolutny obowiązek!). Wysyłka w ciągu <strong class="text-white">24 godzin</strong> buduje profil z samymi ocenami 5.0, dzięki czemu kupujący chętniej wybierają Twoje oferty nawet o 20–30 zł drożej.
+                            </p>
+                        </div>
+
+                        <!-- Step 6 -->
+                        <div class="glass-card rounded-2xl p-6 space-y-3">
+                            <div class="w-11 h-11 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400 font-mono font-bold">
+                                06
+                            </div>
+                            <h3 class="text-lg font-bold text-white">Prawo i Podatki w Polsce</h3>
+                            <p class="text-sm text-zinc-400 leading-relaxed">
+                                W Polsce możesz legalnie testować handel na <strong class="text-white">Działalności Nierejestrowanej</strong> (do limitu przychodu miesięcznego wynoszącego 75% płacy minimalnej) bez opłacania składek ZUS. Prowadź prostą ewidencję sprzedaży!
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- =============================================================
+                 ZAKŁADKA 5: NARZĘDZIA AI, TRACKER MAGAZYNU & CHECKLISTA
+            ============================================================== -->
+            <section id="tab-tools" class="tab-section hidden space-y-6">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+                    <!-- LEFT: GENERATOR OPISÓW OGŁOSZEŃ (AI STYLE) -->
+                    <div class="lg:col-span-6 glass-panel rounded-3xl p-6 space-y-5">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-xl bg-violet-500/20 border border-violet-500/40 flex items-center justify-center text-violet-400">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white">Generator Opisów Ogłoszeń</h3>
+                                <p class="text-xs text-zinc-400">Stwórz gotowy opis pod Vinted / OLX zwiększający konwersję</p>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3.5">
+                            <div>
+                                <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Nazwa produktu / Marka i model</label>
+                                <input type="text" id="genTitle" placeholder="np. Dior Sauvage Elixir 60ml lub Nike Dunk Low Panda 42" class="w-full px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-white focus:outline-none focus:border-violet-500">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Stan przedmiotu</label>
+                                    <select id="genCondition" class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-white focus:outline-none focus:border-violet-500">
+                                        <option value="Nowy, fabrycznie zafoliowany (BNIB)">Nowy w folii (BNIB)</option>
+                                        <option value="Nowy z kompletem metek (DSWT)">Nowy z metkami</option>
+                                        <option value="Jak nowy / stan kolekcjonerski (9.5/10)">Jak nowy (9.5/10)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-zinc-300 mb-1.5">Dodatkowy atut</label>
+                                    <select id="genPerk" class="w-full px-3.5 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-white focus:outline-none focus:border-violet-500">
+                                        <option value="Dowód zakupu (faktura/paragon) do wglądu">Dowód zakupu w zestawie</option>
+                                        <option value="Błyskawiczna wysyłka w ciągu 24h (InPost/Orlen)">Wysyłka w 24h</option>
+                                        <option value="Limitowana edycja - trudno dostępna w sklepach">Limitowana edycja</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button id="generateDescBtn" class="w-full py-3 rounded-xl font-bold text-white bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500 transition-all shadow-lg shadow-violet-600/20 cursor-pointer text-sm">
+                                <i class="fa-solid fa-bolt mr-1.5"></i> Wygeneruj Profesjonalny Opis
+                            </button>
+
+                            <div class="relative">
+                                <textarea id="generatedOutput" rows="7" readonly placeholder="Tutaj pojawi się gotowy, profesjonalny opis ogłoszenia..." class="w-full p-4 rounded-2xl bg-zinc-950/90 border border-zinc-800 text-xs sm:text-sm text-zinc-200 font-sans leading-relaxed focus:outline-none"></textarea>
+                                <button id="copyDescBtn" class="mt-2 w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2">
+                                    <i class="fa-regular fa-copy"></i> Kopiuj tekst ogłoszenia do schowka
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT: CHECKLISTA LEGIT & PROFIT CHECK -->
+                    <div class="lg:col-span-6 glass-panel rounded-3xl p-6 flex flex-col justify-between space-y-5">
+                        <div>
+                            <div class="flex items-center gap-3 mb-4">
+                                <div class="w-10 h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center text-emerald-400">
+                                    <i class="fa-solid fa-list-check"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">Checklista Przed Zakupem</h3>
+                                    <p class="text-xs text-zinc-400">Odklikaj wszystkie 5 punktów zanim wydasz pieniądze</p>
+                                </div>
+                            </div>
+
+                            <div class="space-y-2.5" id="checklistItems">
+                                <label class="flex items-start gap-3 p-3.5 rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-emerald-500/40 cursor-pointer transition-all">
+                                    <input type="checkbox" class="mt-1 accent-emerald-500 w-4 h-4 rounded">
+                                    <span class="text-xs sm:text-sm text-zinc-200">Sprawdziłem <strong>ostatnie sprzedane sztuki</strong> na Vinted/StockX/OLX (nie tylko ceny wystawione!).</span>
+                                </label>
+                                <label class="flex items-start gap-3 p-3.5 rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-emerald-500/40 cursor-pointer transition-all">
+                                    <input type="checkbox" class="mt-1 accent-emerald-500 w-4 h-4 rounded">
+                                    <span class="text-xs sm:text-sm text-zinc-200">Czysty zysk po odliczeniu prowizji i kartonu wynosi minimum <strong>+25% ROI</strong>.</span>
+                                </label>
+                                <label class="flex items-start gap-3 p-3.5 rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-emerald-500/40 cursor-pointer transition-all">
+                                    <input type="checkbox" class="mt-1 accent-emerald-500 w-4 h-4 rounded">
+                                    <span class="text-xs sm:text-sm text-zinc-200">Źródło zakupu jest w 100% oficjalne (autoryzowany sklep / pewny dowód zakupu).</span>
+                                </label>
+                                <label class="flex items-start gap-3 p-3.5 rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-emerald-500/40 cursor-pointer transition-all">
+                                    <input type="checkbox" class="mt-1 accent-emerald-500 w-4 h-4 rounded">
+                                    <span class="text-xs sm:text-sm text-zinc-200">Wybrałem popularny wariant (np. najpopularniejszy rozmiar butów 42–44 lub pojemność 100 ml).</span>
+                                </label>
+                                <label class="flex items-start gap-3 p-3.5 rounded-2xl bg-zinc-900/80 border border-zinc-800 hover:border-emerald-500/40 cursor-pointer transition-all">
+                                    <input type="checkbox" class="mt-1 accent-emerald-500 w-4 h-4 rounded">
+                                    <span class="text-xs sm:text-sm text-zinc-200">Mam zabezpieczony budżet i nie zamrażam 100% gotówki w jednym przedmiocie.</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-xs text-amber-200 flex items-center gap-3">
+                            <i class="fa-solid fa-lightbulb text-amber-400 text-lg"></i>
+                            <span><strong>Złota zasada:</strong> Zysk robisz w momencie taniego zakupu, a nie w momencie wystawiania ogłoszenia!</span>
+                        </div>
+                    </div>
+
+                    <!-- FULL WIDTH: PORTFOLIO / TRACKER MAGAZYNU RESELLERA -->
+                    <div class="lg:col-span-12 glass-panel rounded-3xl p-6 space-y-5">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+                                    <i class="fa-solid fa-boxes-stacked"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-lg font-bold text-white">Twój Magazyn & Tracker Zysków (Auto-Zapis)</h3>
+                                    <p class="text-xs text-zinc-400">Zapisuj kupione przedmioty i śledź swój realny zarobek</p>
+                                </div>
+                            </div>
+
+                            <!-- Portfolio KPI Pills -->
+                            <div class="flex flex-wrap gap-3 font-mono text-xs">
+                                <div class="px-3.5 py-2 rounded-xl bg-zinc-900 border border-zinc-800">
+                                    Zainwestowano: <strong id="invInvested" class="text-white">0 zł</strong>
+                                </div>
+                                <div class="px-3.5 py-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30">
+                                    Zarobiony zysk: <strong id="invRealizedProfit" class="text-emerald-400">+0 zł</strong>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Add Item Form -->
+                        <form id="inventoryForm" class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                            <input type="text" id="invName" required placeholder="Nazwa przedmiotu (np. Lattafa Khamrah 100ml)" class="sm:col-span-5 px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-white focus:outline-none focus:border-emerald-500">
+                            <input type="number" id="invBuy" required min="1" placeholder="Kupiono za (PLN)" class="sm:col-span-2 px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-white font-mono focus:outline-none focus:border-emerald-500">
+                            <input type="number" id="invSell" required min="1" placeholder="Cena sprzedaży (PLN)" class="sm:col-span-2 px-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-white font-mono focus:outline-none focus:border-emerald-500">
+                            <select id="invStatus" class="sm:col-span-2 px-3 py-2.5 rounded-xl bg-zinc-900 border border-zinc-800 text-sm text-white focus:outline-none focus:border-emerald-500">
+                                <option value="Na sprzedaż">Na sprzedaż</option>
+                                <option value="Sprzedane">Sprzedane</option>
+                                <option value="W drodze">W drodze</option>
+                            </select>
+                            <button type="submit" class="sm:col-span-1 py-2.5 px-4 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-zinc-950 font-bold text-sm transition-all cursor-pointer flex items-center justify-center">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </form>
+
+                        <!-- Inventory Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="border-b border-white/10 text-[11px] font-mono uppercase text-zinc-400">
+                                        <th class="py-3 px-3">Przedmiot</th>
+                                        <th class="py-3 px-3">Zakup</th>
+                                        <th class="py-3 px-3">Sprzedaż</th>
+                                        <th class="py-3 px-3">Zysk</th>
+                                        <th class="py-3 px-3">Status</th>
+                                        <th class="py-3 px-3 text-right">Akcja</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventoryTableBody" class="divide-y divide-white/5 text-sm">
+                                    <!-- Dynamiczne wiersze magazynu -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="border-t border-white/5 py-6 px-4 text-center text-xs text-zinc-500">
+            <p>RESELL VAULT PRO © 2026 • Ceny mają charakter szacunkowy i zależą od aktualnych promocji oraz popytu rynkowego.</p>
+        </footer>
+    </div>
+
+    <!-- =====================================================================
+         JAVASCRIPT LOGIC & GENERATOR BAZY 800 PRODUKTÓW
+    ====================================================================== -->
+    <script>
+        // -------------------------------------------------------------------
+        // 1. OBSŁUGA EKRANU LOGOWANIA (HASŁO: 12345)
+        // -------------------------------------------------------------------
+        const CORRECT_PASS = "12345";
+        const loginScreen = document.getElementById("loginScreen");
+        const loginBox = document.getElementById("loginBox");
+        const passwordInput = document.getElementById("passwordInput");
+        const loginBtn = document.getElementById("loginBtn");
+        const loginErrorMsg = document.getElementById("loginErrorMsg");
+        const mainApp = document.getElementById("mainApp");
+        const logoutBtn = document.getElementById("logoutBtn");
+        const togglePassVisibility = document.getElementById("togglePassVisibility");
+
+        if (togglePassVisibility && passwordInput) {
+            togglePassVisibility.addEventListener("click", () => {
+                const isPassword = passwordInput.type === "password";
+                passwordInput.type = isPassword ? "text" : "password";
+                togglePassVisibility.innerHTML = isPassword
+                    ? '<i class="fa-regular fa-eye-slash"></i>'
+                    : '<i class="fa-regular fa-eye"></i>';
+            });
+        }
+
+        function handleLogin() {
+            if (!passwordInput) return;
+            const entered = passwordInput.value.trim();
+
+            if (entered === CORRECT_PASS) {
+                if (loginErrorMsg) loginErrorMsg.classList.add("hidden");
+                if (loginScreen) loginScreen.classList.add("lock-exit");
+                if (mainApp) mainApp.classList.remove("hidden");
+                setTimeout(() => {
+                    if (loginScreen) loginScreen.classList.add("hidden");
+                }, 650);
+                showToast("Witaj w RESELL VAULT PRO! Baza 800 produktów odblokowana.", "success");
+            } else {
+                if (loginErrorMsg) loginErrorMsg.classList.remove("hidden");
+                if (loginBox) {
+                    loginBox.classList.remove("animate-shake");
+                    void loginBox.offsetWidth;
+                    loginBox.classList.add("animate-shake");
+                }
+                passwordInput.value = "";
+                passwordInput.focus();
+            }
+        }
+
+        if (loginBtn) loginBtn.addEventListener("click", handleLogin);
+        if (passwordInput) {
+            passwordInput.addEventListener("keydown", (e) => {
+                if (e.key === "Enter") handleLogin();
+            });
+        }
+
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", () => {
+                if (mainApp) mainApp.classList.add("hidden");
+                if (loginScreen) {
+                    loginScreen.classList.remove("hidden");
+                    loginScreen.classList.remove("lock-exit");
+                }
+                if (passwordInput) passwordInput.value = "";
+                showToast("Wylogowano z panelu.", "info");
+            });
+        }
+
+        // -------------------------------------------------------------------
+        // 2. GENERATOR KOMPLETNEJ BAZY 800 PRODUKTÓW DO RESELLU
+        // -------------------------------------------------------------------
+        function buildFull800Database() {
+            const db = [];
+            let idCounter = 1;
+
+            // A. 200 PERFUMÓW (25 baz x 8 wariantów = 200) -> Zakup z chińskich stron (1688 / Taobao / AliExpress / DHgate)
+            const perfumeBases = [
+                { name: "Dior Sauvage Elixir", buy: 145, sell: 680, source: "1688.com / Taobao", sourceType: "CN", moq: "1 szt.", tip: "Kupujesz taniej na chińskiej platformie (1688/Taobao), a sprzedajesz wyżej na lokalnym rynku." },
+                { name: "Lattafa Khamrah", buy: 48, sell: 175, source: "1688.com / AliExpress", sourceType: "CN", moq: "1 szt.", tip: "Niski koszt zakupu w Chinach i mocny popyt na Vinted oraz OLX." },
+                { name: "Jean Paul Gaultier Le Male Elixir", buy: 95, sell: 490, source: "1688.com / DHgate", sourceType: "CN", moq: "1 szt.", tip: "Zamawiając z chińskich stron, masz znacznie większą przebitkę niż w zwykłym sklepie." },
+                { name: "Armaf Club de Nuit Intense Man", buy: 58, sell: 215, source: "1688.com / AliExpress", sourceType: "CN", moq: "1 szt.", tip: "Tanio z Chin, drożej w odsprzedaży – dobra rotacja przez cały rok." },
+                { name: "Tom Ford Ombré Leather", buy: 120, sell: 610, source: "Taobao / 1688.com", sourceType: "CN", moq: "1 szt.", tip: "Wysoka różnica między ceną z chińskiej platformy a ceną odsprzedaży." },
+                { name: "Afnan 9PM", buy: 52, sell: 179, source: "1688.com / AliExpress", sourceType: "CN", moq: "1 szt.", tip: "Tani zakup u chińskiego dostawcy pozwala łatwo wygenerować zysk." },
+                { name: "Giorgio Armani Stronger With You Intensely", buy: 88, sell: 430, source: "1688.com / DHgate", sourceType: "CN", moq: "1 szt.", tip: "Świetnie sprzedaje się w sezonie prezentowym z wysoką przebitką." },
+                { name: "Versace Eros Flame", buy: 72, sell: 330, source: "AliExpress / 1688.com", sourceType: "CN", moq: "1 szt.", tip: "Znana nazwa ułatwia szybką odsprzedaż po wyższej cenie." },
+                { name: "Mancera Cedrat Boise Intense", buy: 98, sell: 510, source: "Taobao / 1688.com", sourceType: "CN", moq: "1 szt.", tip: "Zakup na chińskiej stronie daje dużą przestrzeń na marżę." },
+                { name: "Maison Alhambra Kismet Magic", buy: 42, sell: 145, source: "1688.com / AliExpress", sourceType: "CN", moq: "1 szt.", tip: "Niski koszt startowy z Chin i szybki zwrot w PLN." },
+                { name: "YSL Myslf", buy: 96, sell: 500, source: "1688.com / DHgate", sourceType: "CN", moq: "1 szt.", tip: "Kupuj taniej na chińskim rynku, odsprzedawaj drożej lokalnie." },
+                { name: "Parfums de Marly Layton", buy: 165, sell: 890, source: "Taobao / 1688.com", sourceType: "CN", moq: "1 szt.", tip: "Duży nominał zysku dzięki niskiej cenie u chińskiego sprzedawcy." },
+                { name: "Lattafa Yara Pink", buy: 44, sell: 159, source: "1688.com / AliExpress", sourceType: "CN", moq: "1 szt.", tip: "Błyskawiczna rotacja na Vinted przy niskim koszcie zakupu z Chin." },
+                { name: "Carolina Herrera Bad Boy Cobalt", buy: 85, sell: 410, source: "1688.com / DHgate", sourceType: "CN", moq: "1 szt.", tip: "Zamawiasz z Chin w niskiej cenie, sprzedajesz znacznie drożej na OLX." },
+                { name: "Chanel Bleu de Chanel", buy: 140, sell: 720, source: "Taobao / 1688.com", sourceType: "CN", moq: "1 szt.", tip: "Bardzo poszukiwana nazwa – wysoka różnica w cenie zakupu i sprzedaży." },
+                { name: "Rasasi Hawas for Him", buy: 56, sell: 230, source: "1688.com / AliExpress", sourceType: "CN", moq: "1 szt.", tip: "Tani import z Chin i dobra sprzedaż w cieplejszych miesiącach." },
+                { name: "Montale Arabians Tonka", buy: 99, sell: 520, source: "Taobao / 1688.com", sourceType: "CN", moq: "1 szt.", tip: "Mocny zapach z dużym przebiciem względem ceny zakupu z Chin." },
+                { name: "Valentino Uomo Born in Roma Intense", buy: 92, sell: 455, source: "1688.com / DHgate", sourceType: "CN", moq: "1 szt.", tip: "Jeden z najlepiej rotujących zapachów – kupuj taniej na chińskich stronach." },
+                { name: "Swiss Arabian Shaghaf Oud", buy: 49, sell: 195, source: "1688.com / AliExpress", sourceType: "CN", moq: "1 szt.", tip: "Niski koszt z Chin i efektowny wygląd na zdjęciach ogłoszenia." },
+                { name: "Prada Luna Rossa Black", buy: 84, sell: 405, source: "1688.com / DHgate", sourceType: "CN", moq: "1 szt.", tip: "Kupujesz z Chin za ułamek ceny rynkowej i sprzedajesz drożej." },
+                { name: "Lattafa Bade'e Al Oud Amethyst", buy: 45, sell: 165, source: "1688.com / AliExpress", sourceType: "CN", moq: "1 szt.", tip: "Świetna przebitka przy zakupie na chińskich platformach." },
+                { name: "Bvlgari Man in Black", buy: 82, sell: 385, source: "1688.com / DHgate", sourceType: "CN", moq: "1 szt.", tip: "Sprawdzona nazwa o stałym popycie i niskim koszcie zakupu z Chin." },
+                { name: "Zara Sand Desert at Sunset", buy: 47, sell: 185, source: "1688.com / Taobao", sourceType: "CN", moq: "1 szt.", tip: "Tanio na chińskiej stronie, drożej w odsprzedaży po wyprzedaniu w sklepach." },
+                { name: "Afnan Turathi Blue", buy: 55, sell: 220, source: "1688.com / AliExpress", sourceType: "CN", moq: "1 szt.", tip: "Dobra marża przy zamawianiu z Chin." },
+                { name: "Kayali Vanilla 28", buy: 89, sell: 460, source: "Taobao / 1688.com", sourceType: "CN", moq: "1 szt.", tip: "Wysoki popyt na Vinted i duża różnica cenowa względem zakupu z Chin." }
+            ];
+            const perfumeVariants = [
+                { suffix: "Wersja 1", mult: 1.0, extraTip: "Standardowa opcja z chińskiego źródła." },
+                { suffix: "Wersja 2", mult: 0.85, extraTip: "Jeszcze niższy koszt zakupu z Chin." },
+                { suffix: "Zestaw", mult: 1.25, extraTip: "Wyższa cena odsprzedaży w komplecie." },
+                { suffix: "Pakiet 2 szt.", mult: 1.85, extraTip: "Większy łączny zysk na jednej paczce." },
+                { suffix: "Edycja Specjalna", mult: 1.18, extraTip: "Atrakcyjna przebitka w odsprzedaży." },
+                { suffix: "Wersja Premium", mult: 1.3, extraTip: "Wyższy próg cenowy przy sprzedaży." },
+                { suffix: "Pakiet Startowy", mult: 0.92, extraTip: "Dobry na start z mniejszym budżetem." },
+                { suffix: "Pakiet Hurtowy 3 szt.", mult: 2.65, extraTip: "Kupujesz kilka sztuk taniej i sprzedajesz osobno drożej." }
+            ];
+
+            perfumeBases.forEach(p => {
+                perfumeVariants.forEach(v => {
+                    const buy = Math.max(25, Math.round((p.buy * v.mult) / 5) * 5);
+                    const sell = Math.max(buy + 60, Math.round((p.sell * v.mult) / 5) * 5);
+                    db.push({
+                        id: idCounter++,
+                        name: `${p.name} – ${v.suffix}`,
+                        category: "Perfumy",
+                        sourceType: p.sourceType,
+                        moq: p.moq,
+                        buy,
+                        sell,
+                        source: p.source,
+                        tip: `${p.tip} ${v.extraTip}`
+                    });
+                });
+            });
+
+            // B. 200 UBRAŃ I SNEAKERSÓW (25 baz x 8 wariantów = 200) -> Zakup z chińskich stron (1688 / Taobao / Weidian / DHgate)
+            const streetwearBases = [
+                { name: "Nike Dunk Low Retro", buy: 125, sell: 540, source: "1688.com / Weidian / Taobao", sourceType: "CN", moq: "1 para", tip: "Kupujesz znacznie taniej na chińskiej stronie i sprzedajesz drożej lokalnie." },
+                { name: "Adidas Samba OG", buy: 115, sell: 510, source: "1688.com / Weidian / DHgate", sourceType: "CN", moq: "1 para", tip: "Niska cena u chińskiego sprzedawcy pozwala zrobić świetną przebitkę." },
+                { name: "Carhartt WIP Pocket T-Shirt", buy: 38, sell: 165, source: "1688.com / Taobao", sourceType: "CN", moq: "1 szt.", tip: "Tani zakup z Chin i szybka odsprzedaż po wyższej cenie." },
+                { name: "New Balance 530", buy: 95, sell: 360, source: "1688.com / Weidian", sourceType: "CN", moq: "1 para", tip: "Kupujesz z Chin taniej niż w sklepach i sprzedajesz drożej." },
+                { name: "Ralph Lauren Classic Oxford Shirt", buy: 68, sell: 400, source: "1688.com / Taobao", sourceType: "CN", moq: "1 szt.", tip: "Duża różnica między ceną zakupu z Chin a ceną odsprzedaży." },
+                { name: "The North Face Nuptse", buy: 240, sell: 1190, source: "1688.com / Weidian / Taobao", sourceType: "CN", moq: "1 szt.", tip: "Mocny zysk kwotowy dzięki niskiej cenie u chińskiego dostawcy." },
+                { name: "Nike Air Force 1", buy: 110, sell: 470, source: "1688.com / Weidian / DHgate", sourceType: "CN", moq: "1 para", tip: "Niski koszt z Chin i stały popyt w odsprzedaży." },
+                { name: "Stüssy Basic Hoodie", buy: 98, sell: 620, source: "Taobao / 1688.com / Weidian", sourceType: "CN", moq: "1 szt.", tip: "Kupujesz na chińskiej platformie taniej, odsprzedajesz znacznie drożej." },
+                { name: "Adidas Gazelle Indoor", buy: 118, sell: 530, source: "1688.com / Weidian / Taobao", sourceType: "CN", moq: "1 para", tip: "Dobra przebitka przy zakupie z Chin." },
+                { name: "Levi's 501 Jeans", buy: 62, sell: 290, source: "1688.com / Taobao", sourceType: "CN", moq: "1 szt.", tip: "Tanio na chińskiej stronie, drożej w odsprzedaży." },
+                { name: "Nike Tech Fleece Hoodie", buy: 95, sell: 480, source: "1688.com / Weidian / Taobao", sourceType: "CN", moq: "1 szt.", tip: "Duże zainteresowanie i wysoka różnica cenowa względem zakupu z Chin." },
+                { name: "Dickies 874 Work Pants", buy: 55, sell: 245, source: "1688.com / Taobao", sourceType: "CN", moq: "1 szt.", tip: "Tani zakup z Chin i pewna marża przy odsprzedaży." },
+                { name: "New Balance 2002R", buy: 128, sell: 580, source: "1688.com / Weidian / Taobao", sourceType: "CN", moq: "1 para", tip: "Kupujesz z Chin taniej, sprzedajesz drożej na rynku lokalnym." },
+                { name: "Tommy Hilfiger Czapka", buy: 28, sell: 120, source: "1688.com / AliExpress", sourceType: "CN", moq: "1 szt.", tip: "Niski koszt wejścia i tania wysyłka przy odsprzedaży." },
+                { name: "Patagonia Better Sweater Fleece", buy: 92, sell: 490, source: "1688.com / Taobao", sourceType: "CN", moq: "1 szt.", tip: "Dobra przebitka dzięki niskiej cenie z chińskiego źródła." },
+                { name: "Asics Gel-Kayano 14", buy: 135, sell: 650, source: "1688.com / Weidian / Taobao", sourceType: "CN", moq: "1 para", tip: "Duży popyt i wysoki zysk względem zakupu na chińskiej stronie." },
+                { name: "Lacoste Skarpety", buy: 22, sell: 105, source: "1688.com / AliExpress", sourceType: "CN", moq: "1 pak.", tip: "Tani produkt z Chin, idealny na szybki obrót." },
+                { name: "Palace Tri-Ferg Tee", buy: 58, sell: 390, source: "Taobao / 1688.com / Weidian", sourceType: "CN", moq: "1 szt.", tip: "Kupujesz taniej z Chin, odsprzedajesz znacznie drożej." },
+                { name: "Ugg Tasman Slipper", buy: 98, sell: 520, source: "1688.com / Weidian / DHgate", sourceType: "CN", moq: "1 para", tip: "Bardzo wysoka przebitka przy zakupie na chińskich platformach." },
+                { name: "Calvin Klein Bokserki", buy: 26, sell: 135, source: "1688.com / AliExpress", sourceType: "CN", moq: "1 pak.", tip: "Niski koszt zakupu w Chinach i łatwa sprzedaż." },
+                { name: "Jordan 1 Retro High", buy: 145, sell: 790, source: "1688.com / Weidian / Taobao", sourceType: "CN", moq: "1 para", tip: "Duża różnica cenowa między chińskim zakupem a odsprzedażą." },
+                { name: "Arc'teryx Beta Jacket", buy: 260, sell: 1650, source: "1688.com / Weidian / Taobao", sourceType: "CN", moq: "1 szt.", tip: "Bardzo duży zysk kwotowy przy zamówieniu z chińskiego źródła." },
+                { name: "Vans Knu Skool", buy: 82, sell: 350, source: "1688.com / Weidian / DHgate", sourceType: "CN", moq: "1 para", tip: "Tanio na chińskiej stronie, drożej przy odsprzedaży." },
+                { name: "Hugo Boss T-Shirt", buy: 42, sell: 215, source: "1688.com / Taobao", sourceType: "CN", moq: "1 szt.", tip: "Niski koszt z Chin i szybka sprzedaż." },
+                { name: "Salomon XT-6", buy: 140, sell: 740, source: "1688.com / Weidian / Taobao", sourceType: "CN", moq: "1 para", tip: "Wysoki popyt i duża marża względem ceny z Chin." }
+            ];
+            const streetwearVariants = [
+                { suffix: "Wersja 1", mult: 1.0, extraTip: "Podstawowa opcja z chińskiego źródła." },
+                { suffix: "Wersja 2", mult: 0.9, extraTip: "Niższy koszt zakupu z Chin." },
+                { suffix: "Zestaw", mult: 1.22, extraTip: "Wyższa kwota odsprzedaży w zestawie." },
+                { suffix: "Pakiet 2 szt.", mult: 1.88, extraTip: "Większy łączny zysk przy jednej wysyłce." },
+                { suffix: "Kolor Klasyczny", mult: 1.04, extraTip: "Łatwiejsza sprzedaż w odsprzedaży." },
+                { suffix: "Wersja Premium", mult: 1.25, extraTip: "Wyższa cena sprzedaży." },
+                { suffix: "Opcja Budżetowa", mult: 0.86, extraTip: "Mniejszy koszt wejścia z Chin." },
+                { suffix: "Pakiet 3 szt.", mult: 2.7, extraTip: "Kupujesz kilka sztuk taniej i sprzedajesz drożej." }
+            ];
+
+            streetwearBases.forEach(s => {
+                streetwearVariants.forEach(v => {
+                    const buy = Math.max(18, Math.round((s.buy * v.mult) / 5) * 5);
+                    const sell = Math.max(buy + 65, Math.round((s.sell * v.mult) / 5) * 5);
+                    db.push({
+                        id: idCounter++,
+                        name: `${s.name} – ${v.suffix}`,
+                        category: "Ubrania i Sneakersy",
+                        sourceType: s.sourceType,
+                        moq: s.moq,
+                        buy,
+                        sell,
+                        source: s.source,
+                        tip: `${s.tip} ${v.extraTip}`
+                    });
+                });
+            });
+
+            // C. 160 ELEKTRONIKI (20 baz x 8 wariantów = 160)
+            const techBases = [
+                { name: "Czytnik Kodów QR / Mini Printer Termiczny CN", buy: 42, sell: 99, source: "1688.com / AliExpress", sourceType: "CN", moq: "2 szt.", tip: "Import z 1688/AliExpress – gadżet edukacyjny/biurowy z wysoką marżą." },
+                { name: "Projektor Mini LED FullHD Portable", buy: 165, sell: 299, source: "1688.com / Alibaba", sourceType: "CN", moq: "2 szt.", tip: "Sprawdzaj realną jasność ANSI i dodaj krótki film z działania w ogłoszeniu." },
+                { name: "Klawiatura Mechaniczna Custom 65% Hot-Swap", buy: 95, sell: 189, source: "1688.com / Taobao", sourceType: "CN", moq: "2 szt.", tip: "Świetny produkt pod społeczność gamingową i fanów customów." },
+                { name: "Lampa Biurkowa LED Monitor Light Bar", buy: 58, sell: 129, source: "1688.com / AliExpress", sourceType: "CN", moq: "3 szt.", tip: "Popularny dodatek do stanowiska PC / home office." },
+                { name: "Bezprzewodowy Mikrofon Krawatowy USB-C/Lightning", buy: 48, sell: 109, source: "1688.com / AliExpress", sourceType: "CN", moq: "3 szt.", tip: "Twórcy TikTok/Reels kupują go impulsowo – szybka sprzedaż." },
+                { name: "Konsola Retro Handheld (Emulatory)", buy: 120, sell: 230, source: "1688.com / Taobao", sourceType: "CN", moq: "2 szt.", tip: "Nostalgia za grami retro napędza sprzedaż przez cały rok." },
+                { name: "Powerbank MagSafe 10000mAh Fast Charge", buy: 52, sell: 115, source: "1688.com / Alibaba", sourceType: "CN", moq: "3 szt.", tip: "Zwracaj uwagę na certyfikaty bezpieczeństwa i realną pojemność." },
+                { name: "Kamera Sportowa 4K Action Cam + Akcesoria", buy: 85, sell: 175, source: "AliExpress / 1688.com", sourceType: "CN", moq: "2 szt.", tip: "Bogaty zestaw uchwytów w pudełku zwiększa atrakcyjność oferty." },
+                { name: "Słuchawki Bezprzewodowe ANC Gaming", buy: 68, sell: 145, source: "1688.com / Alibaba", sourceType: "CN", moq: "2 szt.", tip: "Niskie opóźnienie (low latency) to główny argument dla graczy." },
+                { name: "Stacja Ładowania 3w1 (Telefon + Zegarek + Słuchawki)", buy: 55, sell: 119, source: "1688.com / AliExpress", sourceType: "CN", moq: "3 szt.", tip: "Porządek na nocnym stoliku – świetny pomysł na prezent." },
+                { name: "Kamera Internetowa 2K Autofocus", buy: 62, sell: 129, source: "AliExpress / 1688.com", sourceType: "CN", moq: "2 szt.", tip: "Przydatna do pracy zdalnej, streamów i wideorozmów." },
+                { name: "Mini Odkurzacz Bezprzewodowy do Auta/PC", buy: 46, sell: 99, source: "1688.com / Alibaba", sourceType: "CN", moq: "3 szt.", tip: "Kompaktowy gadżet z dużą liczbą zapytań na OLX." },
+                { name: "Taśma LED RGBIC Smart Wi-Fi / App 5m", buy: 38, sell: 85, source: "1688.com / AliExpress", sourceType: "CN", moq: "4 szt.", tip: "Niski koszt zakupu pozwala na atrakcyjne promocje przy 2 sztukach." },
+                { name: "Drukarka Etykiet Termicznych Bluetooth", buy: 65, sell: 139, source: "1688.com / Taobao", sourceType: "CN", moq: "2 szt.", tip: "Chętnie kupowana przez małych sprzedawców i do organizacji domu." },
+                { name: "Uchwyt Magnetyczny Samochodowy MagSafe", buy: 24, sell: 59, source: "1688.com / AliExpress", sourceType: "CN", moq: "5 szt.", tip: "Wysoki procentowy zwrot z inwestycji przy drobnej elektronice." },
+                { name: "Mysz Bezprzewodowa Ultralight Honeycomb", buy: 54, sell: 115, source: "1688.com / Taobao", sourceType: "CN", moq: "2 szt.", tip: "Lekka konstrukcja przyciąga graczy FPS." },
+                { name: "Głośnik Przenośny Bluetooth Bass Boost", buy: 72, sell: 149, source: "Alibaba / 1688.com", sourceType: "CN", moq: "2 szt.", tip: "Sprawdzaj czas pracy na baterii i wodoodporność." },
+                { name: "Czytnik Kart SD / USB-C Hub 6-w-1", buy: 36, sell: 79, source: "1688.com / AliExpress", sourceType: "CN", moq: "4 szt.", tip: "Niezbędny dla użytkowników laptopów z ograniczoną liczbą portów." },
+                { name: "Projektor Gwiazd / Galaktyka Laser", buy: 44, sell: 95, source: "1688.com / AliExpress", sourceType: "CN", moq: "3 szt.", tip: "Świetny gadżet do pokoju młodzieżowego lub na prezent." },
+                { name: "Mikrofon Kondensatorowy USB z Ramieniem", buy: 78, sell: 159, source: "1688.com / Alibaba", sourceType: "CN", moq: "2 szt.", tip: "Kompletny zestaw do podcastów i rozmów głosowych." }
+            ];
+            const techVariants = [
+                { suffix: "Wersja Standard", mult: 1.0, extraTip: "Podstawowa konfiguracja o najlepszej rotacji." },
+                { suffix: "Wersja Pro / Plus", mult: 1.25, extraTip: "Wyższa cena sprzedaży i lepsza specyfikacja." },
+                { suffix: "Zestaw z Etui / Akcesoriami", mult: 1.18, extraTip: "Dodatkowe akcesoria podnoszą postrzeganą wartość." },
+                { suffix: "Kolor Czarny Mat", mult: 1.02, extraTip: "Najbezpieczniejszy kolor pod względem popytu." },
+                { suffix: "Kolor Biały / Silver", mult: 1.03, extraTip: "Chętnie wybierany pod jasne biurka i setupy." },
+                { suffix: "Pakiet 2 szt.", mult: 1.9, extraTip: "Większy obrót przy jednej wysyłce." },
+                { suffix: "Wersja Bezprzewodowa BT/2.4G", mult: 1.15, extraTip: "Wygoda bez kabli zwiększa zainteresowanie." },
+                { suffix: "Edycja Gaming RGB", mult: 1.12, extraTip: "Podświetlenie przyciąga uwagę na zdjęciach." }
+            ];
+
+            techBases.forEach(t => {
+                techVariants.forEach(v => {
+                    const buy = Math.max(15, Math.round((t.buy * v.mult) / 2) * 2);
+                    const sell = Math.max(buy + 25, Math.round((t.sell * v.mult) / 5) * 5);
+                    db.push({
+                        id: idCounter++,
+                        name: `${t.name} [${v.suffix}]`,
+                        category: "Elektronika",
+                        sourceType: t.sourceType,
+                        moq: t.moq,
+                        buy,
+                        sell,
+                        source: t.source,
+                        tip: `${t.tip} ${v.extraTip}`
+                    });
+                });
+            });
+
+            // D. 120 HURT I PALETY (15 baz x 8 wariantów = 120)
+            const wholesaleBases = [
+                { name: "Pakiet Hurtowy 10 szt. Kubków Termicznych 1.2L", buy: 340, sell: 690, source: "Alibaba.com (DDP)", sourceType: "CN", moq: "10 szt.", tip: "Sprzedaż na sztuki po ~69 zł daje bardzo solidny łączny zysk." },
+                { name: "Karton 20 szt. Zegarków Kwarcowych Minimalist", buy: 280, sell: 580, source: "1688.com (Agent CN)", sourceType: "CN", moq: "20 szt.", tip: "Niski koszt sztuki w hurcie – idealne do rozbicia na OLX/Vinted." },
+                { name: "Paleta / Box Zwrotów Konsumenckich Mix AGD", buy: 1150, sell: 1850, source: "Merkandi.pl / B-Stock EU", sourceType: "HURT", moq: "1 box", tip: "Dokładnie testuj każdy sprzęt przed wystawieniem i podawaj jego realny stan." },
+                { name: "Pakiet 15 szt. Czapek Zimowych Beanie Mix", buy: 195, sell: 420, source: "Merkandi.pl / 1688.com", sourceType: "HURT", moq: "15 szt.", tip: "Sezonowy hit chłodnych miesięcy – łatwa wysyłka w małych paczkach." },
+                { name: "Karton 12 szt. Lamp LED Nocnych / Ambient", buy: 310, sell: 620, source: "Alibaba.com (DDP)", sourceType: "CN", moq: "12 szt.", tip: "Zrób jedno świetne zdjęcie w ciemnym pokoju i użyj go do wszystkich sztuk." },
+                { name: "Pakiet Hurtowy 25 szt. Etui / Akcesoriów GSM", buy: 220, sell: 490, source: "1688.com", sourceType: "CN", moq: "25 szt.", tip: "Stawiaj na najpopularniejsze modele telefonów." },
+                { name: "Stock Odzieżowy Mix Markowy (30 szt.)", buy: 980, sell: 1620, source: "Merkandi.pl", sourceType: "HURT", moq: "30 szt.", tip: "Sprzedaż pojedynczych sztuk na Vinted pozwala zmaksymalizować zysk." },
+                { name: "Karton 10 szt. Maszynek / Trymerów do Brody", buy: 360, sell: 690, source: "Alibaba.com", sourceType: "CN", moq: "10 szt.", tip: "Sprawdzaj końcówki i ładowanie USB przed wysyłką do klienta." },
+                { name: "Pakiet 12 szt. Toreb / Plecaków Miejskich", buy: 480, sell: 890, source: "Merkandi.pl / BigBuy", sourceType: "HURT", moq: "12 szt.", tip: "Uniwersalne modele sprzedają się szybciej niż bardzo ekstrawaganckie." },
+                { name: "Box Perfum / Kosmetyków Stock EU (20 szt.)", buy: 850, sell: 1390, source: "Merkandi.pl / BigBuy", sourceType: "HURT", moq: "20 szt.", tip: "Weryfikuj kody serii oraz stan opakowań zewnętrznych." },
+                { name: "Karton 16 szt. Wagi Kuchennej / Elektronicznej", buy: 260, sell: 520, source: "1688.com / Alibaba", sourceType: "CN", moq: "16 szt.", tip: "Lekki i kompaktowy towar o niskich kosztach magazynowania." },
+                { name: "Pakiet 10 szt. Zestawów Narzędzi Precyzyjnych", buy: 290, sell: 560, source: "1688.com", sourceType: "CN", moq: "10 szt.", tip: "Świetna rotacja wśród majsterkowiczów i serwisantów elektroniki." },
+                { name: "Paleta Mix Zabawek / Gier Planszowych EU", buy: 920, sell: 1480, source: "Merkandi.pl", sourceType: "HURT", moq: "1 box", tip: "Szczyt sprzedaży przypada na okres przedświąteczny i Dzień Dziecka." },
+                { name: "Karton 12 szt. Okularów Przeciwsłonecznych UV400", buy: 210, sell: 450, source: "1688.com / BigBuy", sourceType: "HURT", moq: "12 szt.", tip: "Dodanie twardego etui lub woreczka podnosi cenę odsprzedaży." },
+                { name: "Pakiet Hurtowy 10 szt. Bidonów / Shakerów", buy: 230, sell: 460, source: "BigBuy / Alibaba", sourceType: "HURT", moq: "10 szt.", tip: "Dobrze rotuje na siłowniach, w szkołach i w sezonie letnim." }
+            ];
+            const wholesaleVariants = [
+                { suffix: "Partia Podstawowa", mult: 1.0, extraTip: "Standardowy pakiet startowy." },
+                { suffix: "Partia Rozszerzona +20%", mult: 1.2, extraTip: "Większa ilość sztuk do szybkiego skalowania." },
+                { suffix: "Sezon Zimowy / Świąteczny", mult: 1.15, extraTip: "Wyższy popyt w sezonie prezentowym." },
+                { suffix: "Sezon Wiosna / Lato", mult: 1.1, extraTip: "Dopasowane do wzmożonego ruchu w ciepłe miesiące." },
+                { suffix: "Klasa A (Stan Bardzo Dobry)", mult: 1.18, extraTip: "Minimalny odsetek sztuk wymagających dopracowania." },
+                { suffix: "Mix Kolorów / Wzorów", mult: 1.05, extraTip: "Różnorodność zwiększa szansę na trafienie w gust klienta." },
+                { suffix: "Z Wysyłką DDP / EU", mult: 1.08, extraTip: "Wygodna logistyka bez niespodzianek." },
+                { suffix: "Pakiet Promocyjny", mult: 0.92, extraTip: "Niższy próg wejścia na test partii." }
+            ];
+
+            wholesaleBases.forEach(w => {
+                wholesaleVariants.forEach(v => {
+                    const buy = Math.max(120, Math.round((w.buy * v.mult) / 10) * 10);
+                    const sell = Math.max(buy + 90, Math.round((w.sell * v.mult) / 10) * 10);
+                    db.push({
+                        id: idCounter++,
+                        name: `${w.name} (${v.suffix})`,
+                        category: "Hurt i Palety",
+                        sourceType: w.sourceType,
+                        moq: w.moq,
+                        buy,
+                        sell,
+                        source: w.source,
+                        tip: `${w.tip} ${v.extraTip}`
+                    });
+                });
+            });
+
+            // E. 120 INNE I KOLEKCJE (15 baz x 8 wariantów = 120)
+            const otherBases = [
+                { name: "LEGO Star Wars / Technic Set", buy: 380, sell: 540, source: "Amazon / Allegro / Smyk", sourceType: "RETAIL", moq: "1 szt.", tip: "Zestawy wycofywane z produkcji (EOL) zyskują na wartości po kilku miesiącach." },
+                { name: "Pop Mart Labubu Vinyl Plush Blind Box", buy: 85, sell: 165, source: "Taobao / Pop Mart / Vinted", sourceType: "CN", moq: "1 szt.", tip: "Ogromny trend kolekcjonerski – sekretne figurki osiągają wysokie ceny." },
+                { name: "Casio G-Shock DW-5600 / GA-2100", buy: 320, sell: 460, source: "Zibi / Allegro / Ceneo", sourceType: "RETAIL", moq: "1 szt.", tip: "Niezniszczalne zegarki o stałym popycie i niskim ryzyku reklamacji." },
+                { name: "Stanley Quencher H2.0 1.18L", buy: 155, sell: 235, source: "Zalando / Oficjalne dropy", sourceType: "RETAIL", moq: "1 szt.", tip: "Limitowane kolory znikają w minuty – świetny popyt na Vinted i OLX." },
+                { name: "Funko Pop! Limitowana Figurka", buy: 65, sell: 120, source: "EMP / Allegro / Konwenty", sourceType: "RETAIL", moq: "1 szt.", tip: "Pudełko w stanie idealnym (mint) to podstawa przy sprzedaży kolekcjonerom." },
+                { name: "Pokémon TCG Elite Trainer Box (ETB)", buy: 185, sell: 285, source: "Sklepy TCG / Allegro", sourceType: "RETAIL", moq: "1 szt.", tip: "Trzymaj w folii fabrycznej – sealed boxy najlepiej trzymają cenę." },
+                { name: "Rakieta / Akcesoria Padel lub Badminton", buy: 190, sell: 310, source: "Decathlon / Sklepy sportowe", sourceType: "RETAIL", moq: "1 szt.", tip: "Rosnąca popularność sportów rakietowych zwiększa liczbę kupujących." },
+                { name: "Figurka Anime / Kolekcjonerska PVC", buy: 75, sell: 145, source: "Taobao / AliExpress", sourceType: "CN", moq: "1 szt.", tip: "Dobre zdjęcia w detalu i podanie wysokości w cm ułatwiają sprzedaż." },
+                { name: "Zegarek Casio Vintage A168WA", buy: 110, sell: 175, source: "Allegro / Ceneo", sourceType: "RETAIL", moq: "1 szt.", tip: "Styl retro – jeden z najchętniej kupowanych zegarków do 200 zł." },
+                { name: "Zestaw Kart Kolekcjonerskich / Booster Box", buy: 340, sell: 495, source: "Sklepy hobbystyczne", sourceType: "RETAIL", moq: "1 box", tip: "Sprawdzaj aktualne sety i zainteresowanie w grupach kolekcjonerskich." },
+                { name: "Klocki Kolekcjonerskie / Creator Expert", buy: 420, sell: 610, source: "Amazon / LEGO Store", sourceType: "RETAIL", moq: "1 szt.", tip: "Duże zestawy eksponowane świetnie sprzedają się przed świętami." },
+                { name: "Brelok / Zawieszka Kolekcjonerska Designer", buy: 28, sell: 65, source: "1688.com / Taobao", sourceType: "CN", moq: "3 szt.", tip: "Niski koszt zakupu i łatwa wysyłka w kopercie bąbelkowej." },
+                { name: "Zestaw Do Herbaty / Matcha Ceremonialna", buy: 68, sell: 135, source: "1688.com / AliExpress", sourceType: "CN", moq: "2 szt.", tip: "Estetyczne zdjęcia na drewnianym lub kamiennym blacie robią robotę." },
+                { name: "Album Kolekcjonerski na Karty (9-Pocket)", buy: 45, sell: 95, source: "1688.com / Allegro", sourceType: "CN", moq: "2 szt.", tip: "Kolekcjonerzy kart zawsze potrzebują nowych klaserów na zbiory." },
+                { name: "Zegarek Smartwatch / Sportowy Budżetowy", buy: 79, sell: 155, source: "AliExpress / 1688.com", sourceType: "CN", moq: "2 szt.", tip: "Podkreśl czas pracy na baterii i powiadomienia z telefonu." }
+            ];
+            const otherVariants = [
+                { suffix: "Zafoliowany (Sealed)", mult: 1.05, extraTip: "Fabryczne zamknięcie zwiększa zaufanie kupującego." },
+                { suffix: "Edycja Kolekcjonerska", mult: 1.2, extraTip: "Poszukiwane przez kolekcjonerów serii." },
+                { suffix: "Wersja EU/JP", mult: 1.02, extraTip: "Popularna wersja regionalna." },
+                { suffix: "Zestaw Startowy", mult: 1.12, extraTip: "Gotowy komplet ułatwiający zakup." },
+                { suffix: "Limitowany Drop", mult: 1.25, extraTip: "Ograniczona dostępność wspiera cenę resellu." },
+                { suffix: "Kolor Klasyczny", mult: 1.0, extraTip: "Bezpieczny wybór o stałym popycie." },
+                { suffix: "Pakiet 2 szt.", mult: 1.9, extraTip: "Wyższy łączny zarobek z jednej transakcji." },
+                { suffix: "Wersja Prezentowa", mult: 1.14, extraTip: "Świetnie sprzedaje się w okresach prezentowych." }
+            ];
+
+            otherBases.forEach(o => {
+                otherVariants.forEach(v => {
+                    const buy = Math.max(20, Math.round((o.buy * v.mult) / 5) * 5);
+                    const sell = Math.max(buy + 30, Math.round((o.sell * v.mult) / 5) * 5);
+                    db.push({
+                        id: idCounter++,
+                        name: `${o.name} – ${v.suffix}`,
+                        category: "Inne i Kolekcje",
+                        sourceType: o.sourceType,
+                        moq: o.moq,
+                        buy,
+                        sell,
+                        source: o.source,
+                        tip: `${o.tip} ${v.extraTip}`
+                    });
+                });
+            });
+
+            return db;
+        }
+
+        const PRODUCTS_DB = buildFull800Database();
+
+        // -------------------------------------------------------------------
+        // 3. SYSTEM POWIADOMIEŃ (TOAST) & PRZEŁĄCZANIE ZAKŁADEK (TABS)
+        // -------------------------------------------------------------------
+        function showToast(message, type = "info") {
+            const container = document.getElementById("toastContainer");
+            if (!container) return;
+
+            const toast = document.createElement("div");
+            const colors = type === "success"
+                ? "border-emerald-500/40 bg-zinc-900/95 text-emerald-300"
+                : "border-violet-500/40 bg-zinc-900/95 text-violet-200";
+            const icon = type === "success"
+                ? '<i class="fa-solid fa-circle-check text-emerald-400"></i>'
+                : '<i class="fa-solid fa-circle-info text-violet-400"></i>';
+
+            toast.className = `pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl border shadow-xl text-xs font-semibold transition-all duration-300 ${colors}`;
+            toast.innerHTML = `${icon}<span>${message}</span>`;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(8px)";
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        function switchTab(tabId) {
+            const sections = document.querySelectorAll(".tab-section");
+            const navTabs = document.querySelectorAll(".nav-tab");
+
+            sections.forEach(sec => {
+                if (sec.id === `tab-${tabId}`) {
+                    sec.classList.remove("hidden");
+                    sec.classList.remove("tab-animate");
+                    void sec.offsetWidth;
+                    sec.classList.add("tab-animate");
+                } else {
+                    sec.classList.add("hidden");
+                }
+            });
+
+            navTabs.forEach(btn => {
+                const isTarget = btn.dataset.tab === tabId;
+                if (isTarget) {
+                    btn.className = "nav-tab active-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-bold transition-all flex items-center gap-2 cursor-pointer bg-emerald-500 text-zinc-950 shadow-lg shadow-emerald-500/20";
+                } else {
+                    btn.className = "nav-tab px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 cursor-pointer text-zinc-400 hover:text-white hover:bg-white/5";
+                }
+            });
+        }
+
+        document.querySelectorAll(".nav-tab").forEach(btn => {
+            btn.addEventListener("click", () => {
+                const targetTab = btn.dataset.tab;
+                if (targetTab) {
+                    switchTab(targetTab);
+                }
+            });
+        });
+
+        // -------------------------------------------------------------------
+        // 4. GENERATOR BEZPOŚREDNICH LINKÓW WYSZUKIWANIA PRODUKTU W SKLEPACH
+        // -------------------------------------------------------------------
+        function buildProductSearchUrl(product) {
+            // Zostawiamy wyłącznie czystą nazwę produktu – bez pojemności, dopisków i wariantów
+            const cleanName = product.name
+                .replace(/\s*[\[\(][^\]]*[\]\)]\s*$/g, "")
+                .replace(/\s*–\s*(?:Wersja\s*\d+|Zestaw|Pakiet(?:\s+\d+\s*szt\.|\s+Startowy|\s+Hurtowy\s*\d*\s*szt\.)?|Edycja\s+Specjalna|Wersja\s+Premium|Kolor\s+Klasyczny|Opcja\s+Budżetowa|Partia\s+Podstawowa|Partia\s+Rozszerzona(?:\s*\+\d+%)?|Sezon\s+Zimowy\s*\/\s*Świąteczny|Sezon\s+Wiosna\s*\/\s*Lato|Klasa\s+A(?:\s*\([^\)]*\))?|Mix\s+Kolorów\s*\/\s*Wzorów|Z\s+Wysyłką\s+DDP\s*\/\s*EU|Pakiet\s+Promocyjny|Zafoliowany\s*\(Sealed\)|Edycja\s+Kolekcjonerska|Wersja\s+EU\/JP|Zestaw\s+Startowy|Limitowany\s+Drop|Wersja\s+Prezentowa)\s*$/i, "")
+                .replace(/\s*\b\d+\s*(?:ml|l|g|kg|szt\.?|pak\.?|para|pary)\b.*$/i, "")
+                .trim();
+
+            const encoded = encodeURIComponent(cleanName);
+            const src = product.source.toLowerCase();
+
+            if (src.includes("1688")) {
+                return { url: `https://s.1688.com/selloffer/offer_search.htm?keywords=${encoded}`, label: "1688.com" };
+            }
+            if (src.includes("taobao")) {
+                return { url: `https://s.taobao.com/search?q=${encoded}`, label: "Taobao" };
+            }
+            if (src.includes("weidian")) {
+                return { url: `https://weidian.com/search?keyword=${encoded}`, label: "Weidian" };
+            }
+            if (src.includes("alibaba")) {
+                return { url: `https://www.alibaba.com/trade/search?SearchText=${encoded}`, label: "Alibaba" };
+            }
+            if (src.includes("aliexpress")) {
+                return { url: `https://www.aliexpress.com/wholesale?SearchText=${encoded}`, label: "AliExpress" };
+            }
+            if (src.includes("dhgate")) {
+                return { url: `https://www.dhgate.com/wholesale/${encodeURIComponent(cleanName.replace(/\s+/g, "-"))}.html`, label: "DHgate" };
+            }
+            if (src.includes("made-in-china")) {
+                return { url: `https://www.made-in-china.com/products-search/hot-china-products/${encoded}.html`, label: "Made-in-China" };
+            }
+            if (src.includes("merkandi")) {
+                return { url: `https://merkandi.pl/products?search=${encoded}`, label: "Merkandi" };
+            }
+            if (src.includes("bigbuy")) {
+                return { url: `https://www.bigbuy.eu/pl/search?q=${encoded}`, label: "BigBuy" };
+            }
+            if (src.includes("notino")) {
+                return { url: `https://www.notino.pl/szukaj/?exps=${encoded}`, label: "Notino" };
+            }
+            if (src.includes("douglas")) {
+                return { url: `https://www.douglas.pl/pl/search?q=${encoded}`, label: "Douglas" };
+            }
+            if (src.includes("sephora")) {
+                return { url: `https://www.sephora.pl/szukaj/?q=${encoded}`, label: "Sephora" };
+            }
+            if (src.includes("flaconi")) {
+                return { url: `https://www.flaconi.pl/szukaj/?q=${encoded}`, label: "Flaconi" };
+            }
+            if (src.includes("zalando")) {
+                return { url: `https://www.zalando.pl/katalog/?q=${encoded}`, label: "Zalando" };
+            }
+            if (src.includes("stockx")) {
+                return { url: `https://stockx.com/search?s=${encoded}`, label: "StockX" };
+            }
+            if (src.includes("nike")) {
+                return { url: `https://www.nike.com/pl/w?q=${encoded}`, label: "Nike" };
+            }
+            if (src.includes("adidas")) {
+                return { url: `https://www.adidas.pl/search?q=${encoded}`, label: "Adidas" };
+            }
+            if (src.includes("allegro")) {
+                return { url: `https://allegro.pl/listing?string=${encoded}`, label: "Allegro" };
+            }
+            if (src.includes("ceneo")) {
+                return { url: `https://www.ceneo.pl/;szukaj-${encoded}`, label: "Ceneo" };
+            }
+            if (src.includes("amazon")) {
+                return { url: `https://www.amazon.pl/s?k=${encoded}`, label: "Amazon" };
+            }
+
+            const primaryStore = product.source.split("/")[0].split("(")[0].trim();
+            return {
+                url: `https://www.google.com/search?q=${encodeURIComponent(primaryStore + " " + cleanName)}`,
+                label: primaryStore
+            };
+        }
+
+        // -------------------------------------------------------------------
+        // 5. RENDEROWANIE, FILTROWANIE I PAGINACJA BAZY 800 PRODUKTÓW
+        // -------------------------------------------------------------------
+        const productsGrid = document.getElementById("productsGrid");
+        const searchInput = document.getElementById("searchInput");
+        const sourceFilterSelect = document.getElementById("sourceFilterSelect");
+        const sortSelect = document.getElementById("sortSelect");
+        const categoryBtns = document.querySelectorAll(".cat-btn");
+        const resultsCount = document.getElementById("resultsCount");
+        const pageInfoText = document.getElementById("pageInfoText");
+        const jumpPageInput = document.getElementById("jumpPageInput");
+        const prevPageBtn = document.getElementById("prevPageBtn");
+        const nextPageBtn = document.getElementById("nextPageBtn");
+        const firstPageBtn = document.getElementById("firstPageBtn");
+        const lastPageBtn = document.getElementById("lastPageBtn");
+
+        let currentCategory = "ALL";
+        let currentSourceType = "ALL";
+        let currentPage = 1;
+        const ITEMS_PER_PAGE = 24;
+        let currentFilteredList = [...PRODUCTS_DB];
+
+        // Calculate global stats for header
+        function updateGlobalStats() {
+            let totalProfit = 0;
+            let totalRoi = 0;
+            PRODUCTS_DB.forEach(p => {
+                const profit = p.sell - p.buy;
+                const roi = (profit / p.buy) * 100;
+                totalProfit += profit;
+                totalRoi += roi;
+            });
+            document.getElementById("statAvgProfit").textContent = `+${Math.round(totalProfit / PRODUCTS_DB.length)} zł`;
+            document.getElementById("headerAvgRoi").textContent = `+${Math.round(totalRoi / PRODUCTS_DB.length)}%`;
+        }
+
+        function getCategoryBadgeStyle(cat) {
+            if (cat === "Perfumy") return "bg-violet-500/15 text-violet-300 border-violet-500/30";
+            if (cat === "Ubrania i Sneakersy") return "bg-emerald-500/15 text-emerald-300 border-emerald-500/30";
+            if (cat === "Elektronika") return "bg-cyan-500/15 text-cyan-300 border-cyan-500/30";
+            if (cat === "Hurt i Palety") return "bg-rose-500/15 text-rose-300 border-rose-500/30";
+            return "bg-amber-500/15 text-amber-300 border-amber-500/30";
+        }
+
+        function getSourceBadge(sourceType) {
+            if (sourceType === "CN") return `<span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-rose-500/15 text-rose-300 border border-rose-500/30">🇨🇳 CN Import</span>`;
+            if (sourceType === "HURT") return `<span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30">📦 Hurt EU</span>`;
+            return `<span class="px-2 py-0.5 rounded-md text-[10px] font-mono font-bold bg-zinc-800 text-zinc-300 border border-zinc-700">🏪 Sklep/Drop</span>`;
+        }
+
+        function applyFiltersAndRender(resetPage = true) {
+            if (resetPage) currentPage = 1;
+
+            const query = searchInput.value.toLowerCase().trim();
+            const sortBy = sortSelect.value;
+
+            let filtered = PRODUCTS_DB.filter(item => {
+                const matchesCat = currentCategory === "ALL" || item.category === currentCategory;
+                const matchesSource = currentSourceType === "ALL" || item.sourceType === currentSourceType;
+                const matchesSearch = item.name.toLowerCase().includes(query) ||
+                                      item.source.toLowerCase().includes(query) ||
+                                      item.category.toLowerCase().includes(query);
+                return matchesCat && matchesSource && matchesSearch;
+            });
+
+            if (sortBy === "profitDesc") {
+                filtered.sort((a, b) => (b.sell - b.buy) - (a.sell - a.buy));
+            } else if (sortBy === "roiDesc") {
+                filtered.sort((a, b) => ((b.sell - b.buy) / b.buy) - ((a.sell - a.buy) / a.buy));
+            } else if (sortBy === "buyAsc") {
+                filtered.sort((a, b) => a.buy - b.buy);
+            } else if (sortBy === "nameAsc") {
+                filtered.sort((a, b) => a.name.localeCompare(b.name, 'pl'));
+            }
+
+            currentFilteredList = filtered;
+            renderPage();
+        }
+
+        function renderPage() {
+            const totalItems = currentFilteredList.length;
+            const totalPages = Math.max(1, Math.ceil(totalItems / ITEMS_PER_PAGE));
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            const startIdx = (currentPage - 1) * ITEMS_PER_PAGE;
+            const endIdx = Math.min(startIdx + ITEMS_PER_PAGE, totalItems);
+            const pageItems = currentFilteredList.slice(startIdx, endIdx);
+
+            resultsCount.textContent = `Znaleziono: ${totalItems} z ${PRODUCTS_DB.length}`;
+            pageInfoText.textContent = totalItems > 0
+                ? `Strona ${currentPage} z ${totalPages} (Pozycje ${startIdx + 1} - ${endIdx})`
+                : `Brak wyników (0 z ${PRODUCTS_DB.length})`;
+
+            jumpPageInput.max = totalPages;
+            jumpPageInput.value = currentPage;
+
+            prevPageBtn.disabled = currentPage <= 1;
+            firstPageBtn.disabled = currentPage <= 1;
+            nextPageBtn.disabled = currentPage >= totalPages;
+            lastPageBtn.disabled = currentPage >= totalPages;
+
+            if (pageItems.length === 0) {
+                productsGrid.innerHTML = `
+                    <div class="col-span-full glass-panel rounded-3xl p-12 text-center">
+                        <i class="fa-solid fa-box-open text-4xl text-zinc-600 mb-3"></i>
+                        <h3 class="text-lg font-bold text-white">Brak produktów spełniających kryteria</h3>
+                        <p class="text-sm text-zinc-400 mt-1">Spróbuj wpisać inną frazę lub zresetuj filtry źródła i kategorii.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            productsGrid.innerHTML = pageItems.map(item => {
+                const profit = item.sell - item.buy;
+                const roi = Math.round((profit / item.buy) * 100);
+                const badgeStyle = getCategoryBadgeStyle(item.category);
+                const searchMeta = buildProductSearchUrl(item);
+
+                return `
+                    <article class="glass-card rounded-2xl p-5 flex flex-col justify-between gap-4">
+                        <div>
+                            <!-- Top Row: Number, Category & Source Tag -->
+                            <div class="flex items-center justify-between gap-2 mb-3">
+                                <div class="flex items-center gap-1.5 flex-wrap">
+                                    <span class="text-xs font-mono font-bold text-zinc-500">#${String(item.id).padStart(3, '0')}</span>
+                                    <span class="px-2 py-0.5 rounded-lg text-[10px] font-semibold border ${badgeStyle}">
+                                        ${item.category}
+                                    </span>
+                                    ${getSourceBadge(item.sourceType)}
+                                </div>
+                                <span class="text-[11px] font-mono text-zinc-400 whitespace-nowrap">
+                                    MOQ: <strong class="text-white">${item.moq}</strong>
+                                </span>
+                            </div>
+
+                            <!-- Product Title -->
+                            <h3 class="text-base font-bold text-white leading-snug mb-2">
+                                ${item.name}
+                            </h3>
+
+                            <!-- Source Store Direct Search Link -->
+                            <div class="flex items-center justify-between gap-2 text-xs text-zinc-400 mb-3 bg-zinc-900/70 border border-white/5 rounded-xl px-3 py-2">
+                                <div class="flex items-center gap-1.5 truncate">
+                                    <i class="fa-solid fa-store text-emerald-400 shrink-0"></i>
+                                    <span class="truncate text-zinc-300" title="${item.source}">${item.source}</span>
+                                </div>
+                                <a href="${searchMeta.url}" target="_blank" rel="noopener noreferrer" class="shrink-0 px-2.5 py-1 rounded-lg bg-emerald-500/15 hover:bg-emerald-500 text-emerald-300 hover:text-zinc-950 border border-emerald-500/30 font-bold text-[11px] transition-all flex items-center gap-1">
+                                    <span>Szukaj na ${searchMeta.label}</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+                                </a>
+                            </div>
+
+                            <!-- Pro Tip -->
+                            <p class="text-xs text-zinc-400 bg-zinc-950/60 border border-white/5 rounded-xl p-2.5 leading-relaxed">
+                                <i class="fa-solid fa-bolt text-amber-400 mr-1"></i> ${item.tip}
+                            </p>
+                        </div>
+
+                        <!-- Prices & Profit Box -->
+                        <div class="pt-3 border-t border-white/10 space-y-3">
+                            <div class="grid grid-cols-3 gap-2 text-center bg-zinc-950/70 rounded-xl p-2.5 border border-white/5">
+                                <div>
+                                    <span class="block text-[10px] uppercase text-zinc-500">Zakup</span>
+                                    <span class="font-mono text-sm font-bold text-zinc-300">${item.buy} zł</span>
+                                </div>
+                                <div class="border-x border-white/10">
+                                    <span class="block text-[10px] uppercase text-zinc-500">Resell</span>
+                                    <span class="font-mono text-sm font-bold text-white">${item.sell} zł</span>
+                                </div>
+                                <div>
+                                    <span class="block text-[10px] uppercase text-emerald-400">Zysk (+${roi}%)</span>
+                                    <span class="font-mono text-sm font-extrabold text-emerald-400">+${profit} zł</span>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-2">
+                                <button
+                                    onclick="sendToCalculator(${item.id})"
+                                    class="py-2.5 px-2.5 rounded-xl bg-zinc-900 hover:bg-emerald-500 text-zinc-200 hover:text-zinc-950 border border-zinc-800 hover:border-emerald-400 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                                >
+                                    <i class="fa-solid fa-calculator"></i>
+                                    <span>Kalkulator</span>
+                                </button>
+                                <button
+                                    onclick="quickAddToInventory(${item.id})"
+                                    class="py-2.5 px-2.5 rounded-xl bg-zinc-900 hover:bg-violet-500/20 text-violet-300 border border-zinc-800 hover:border-violet-500/40 text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer"
+                                >
+                                    <i class="fa-solid fa-plus"></i>
+                                    <span>Do magazynu</span>
+                                </button>
+                            </div>
+                        </div>
+                    </article>
+                `;
+            }).join("");
+        }
+
+        categoryBtns.forEach(btn => {
+            btn.addEventListener("click", () => {
+                currentCategory = btn.dataset.cat;
+                categoryBtns.forEach(b => {
+                    b.className = "cat-btn px-3.5 py-1.5 rounded-xl text-xs font-semibold bg-zinc-900 text-zinc-400 border border-zinc-800 hover:text-white transition-all cursor-pointer";
+                });
+                btn.className = "cat-btn active px-3.5 py-1.5 rounded-xl text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 transition-all cursor-pointer";
+                applyFiltersAndRender(true);
+            });
+        });
+
+        sourceFilterSelect.addEventListener("change", () => {
+            currentSourceType = sourceFilterSelect.value;
+            applyFiltersAndRender(true);
+        });
+
+        searchInput.addEventListener("input", () => applyFiltersAndRender(true));
+        sortSelect.addEventListener("change", () => applyFiltersAndRender(true));
+
+        // Pagination Events
+        prevPageBtn.addEventListener("click", () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage();
+                document.getElementById("tab-catalog").scrollIntoView({ behavior: "smooth" });
+            }
+        });
+        nextPageBtn.addEventListener("click", () => {
+            const totalPages = Math.ceil(currentFilteredList.length / ITEMS_PER_PAGE);
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage();
+                document.getElementById("tab-catalog").scrollIntoView({ behavior: "smooth" });
+            }
+        });
+        firstPageBtn.addEventListener("click", () => {
+            currentPage = 1;
+            renderPage();
+        });
+        lastPageBtn.addEventListener("click", () => {
+            currentPage = Math.max(1, Math.ceil(currentFilteredList.length / ITEMS_PER_PAGE));
+            renderPage();
+        });
+        jumpPageInput.addEventListener("change", () => {
+            const val = parseInt(jumpPageInput.value, 10);
+            if (!isNaN(val)) {
+                currentPage = val;
+                renderPage();
+            }
+        });
+
+        window.filterByChineseAndGo = function() {
+            currentSourceType = "CN";
+            sourceFilterSelect.value = "CN";
+            applyFiltersAndRender(true);
+            switchTab("catalog");
+            showToast("Wyświetlono produkty z importu CN (1688, Taobao, Alibaba)!", "info");
+        };
+
+        // -------------------------------------------------------------------
+        // 6. KALKULATOR ZYSKU, WALUT (CNY/USD/EUR) I HURTU
+        // -------------------------------------------------------------------
+        const calcCurrency = document.getElementById("calcCurrency");
+        const calcQuantity = document.getElementById("calcQuantity");
+        const calcBuyPrice = document.getElementById("calcBuyPrice");
+        const calcSellPrice = document.getElementById("calcSellPrice");
+        const calcShippingCost = document.getElementById("calcShippingCost");
+        const calcPlatform = document.getElementById("calcPlatform");
+        const calcCustomFee = document.getElementById("calcCustomFee");
+        const customFeeContainer = document.getElementById("customFeeContainer");
+
+        function getCurrencyCode() {
+            const val = calcCurrency.value;
+            if (val === "0.56") return "CNY";
+            if (val === "4.02") return "USD";
+            if (val === "4.32") return "EUR";
+            return "PLN";
+        }
+
+        function calculateProfit() {
+            const rate = parseFloat(calcCurrency.value) || 1;
+            const qty = Math.max(1, parseInt(calcQuantity.value, 10) || 1);
+            const buyUnitForeign = parseFloat(calcBuyPrice.value) || 0;
+            const sellUnitPln = parseFloat(calcSellPrice.value) || 0;
+            const shippingTotalPln = parseFloat(calcShippingCost.value) || 0;
+
+            const currCode = getCurrencyCode();
+            document.getElementById("buyCurrencyLabel").textContent = currCode;
+            document.getElementById("buyCurrencyBadge").textContent = currCode;
+            document.getElementById("resQtyLabel").textContent = `${qty} szt.`;
+
+            let feePercent = 0;
+            if (calcPlatform.value === "custom") {
+                customFeeContainer.classList.remove("hidden");
+                feePercent = parseFloat(calcCustomFee.value) || 0;
+            } else {
+                customFeeContainer.classList.add("hidden");
+                feePercent = parseFloat(calcPlatform.value) || 0;
+            }
+
+            const totalBuyPln = buyUnitForeign * rate * qty;
+            const totalGrossPln = sellUnitPln * qty;
+            const totalFeePln = totalGrossPln * (feePercent / 100);
+            const totalCostPln = totalBuyPln + shippingTotalPln;
+            const netProfit = totalGrossPln - totalCostPln - totalFeePln;
+            const profitPerUnit = netProfit / qty;
+            const roi = totalCostPln > 0 ? (netProfit / totalCostPln) * 100 : 0;
+            const margin = totalGrossPln > 0 ? (netProfit / totalGrossPln) * 100 : 0;
+
+            // Update DOM
+            const profitEl = document.getElementById("calcNetProfit");
+            profitEl.textContent = `${netProfit >= 0 ? "+" : ""}${netProfit.toFixed(2)} zł`;
+            profitEl.className = netProfit >= 0
+                ? "text-4xl sm:text-5xl font-extrabold font-mono text-emerald-400 text-glow-emerald mt-3"
+                : "text-4xl sm:text-5xl font-extrabold font-mono text-rose-400 mt-3";
+
+            document.getElementById("calcPerUnitNote").textContent = `Zysk na 1 sztuce: ${profitPerUnit >= 0 ? "+" : ""}${profitPerUnit.toFixed(2)} zł`;
+            document.getElementById("calcRoiText").textContent = `${roi >= 0 ? "+" : ""}${roi.toFixed(1)}%`;
+            document.getElementById("resGross").textContent = `${totalGrossPln.toFixed(2)} zł`;
+            document.getElementById("resTotalCost").textContent = `-${totalCostPln.toFixed(2)} zł`;
+            document.getElementById("resFeeAmount").textContent = `-${totalFeePln.toFixed(2)} zł (${feePercent}%)`;
+            document.getElementById("resMargin").textContent = `${margin.toFixed(1)}%`;
+
+            // Quality Badge & Bar
+            const badge = document.getElementById("dealQualityBadge");
+            const bar = document.getElementById("calcProfitBar");
+            const clampedBar = Math.max(0, Math.min(100, roi));
+            bar.style.width = `${clampedBar}%`;
+
+            if (netProfit <= 0) {
+                badge.textContent = "Strata / Nieopłacalne";
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-rose-500/20 text-rose-300 border border-rose-500/40";
+                bar.className = "h-full rounded-full bg-rose-500 transition-all duration-500";
+            } else if (roi < 20) {
+                badge.textContent = "Niska Marża";
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40";
+                bar.className = "h-full rounded-full bg-amber-400 transition-all duration-500";
+            } else if (roi < 45) {
+                badge.textContent = "Dobry Zysk 👍";
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40";
+                bar.className = "h-full rounded-full bg-emerald-400 transition-all duration-500";
+            } else {
+                badge.textContent = "Złoty Strzał 🔥";
+                badge.className = "px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/25 text-emerald-300 border border-emerald-400/50";
+                bar.className = "h-full rounded-full bg-gradient-to-r from-emerald-400 to-cyan-300 transition-all duration-500";
+            }
+        }
+
+        [calcCurrency, calcQuantity, calcBuyPrice, calcSellPrice, calcShippingCost, calcPlatform, calcCustomFee].forEach(el => {
+            el.addEventListener("input", calculateProfit);
+        });
+
+        document.getElementById("resetCalcBtn").addEventListener("click", () => {
+            calcCurrency.value = "1";
+            calcQuantity.value = 1;
+            calcBuyPrice.value = 0;
+            calcSellPrice.value = 0;
+            calcShippingCost.value = 0;
+            calcPlatform.value = "0";
+            document.getElementById("calcSelectedProductBanner").classList.add("hidden");
+            calculateProfit();
+        });
+
+        // Bridge from Catalog to Calculator
+        window.sendToCalculator = function(productId) {
+            const product = PRODUCTS_DB.find(p => p.id === productId);
+            if (!product) return;
+
+            calcCurrency.value = "1";
+            calcQuantity.value = 1;
+            calcBuyPrice.value = product.buy;
+            calcSellPrice.value = product.sell;
+            calcShippingCost.value = 12;
+            document.getElementById("calcProductName").textContent = `#${product.id} ${product.name}`;
+            document.getElementById("calcSelectedProductBanner").classList.remove("hidden");
+
+            calculateProfit();
+            switchTab("calculator");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            showToast(`Załadowano "${product.name}" do kalkulatora!`, "info");
+        };
+
+        window.quickAddToInventory = function(productId) {
+            const product = PRODUCTS_DB.find(p => p.id === productId);
+            if (!product) return;
+
+            inventory.unshift({
+                id: Date.now(),
+                name: product.name,
+                buy: product.buy,
+                sell: product.sell,
+                status: "Na sprzedaż"
+            });
+            saveInventory();
+            showToast(`Dodano "${product.name}" do Twojego magazynu!`, "success");
+        };
+
+        // -------------------------------------------------------------------
+        // 7. GENERATOR OPISÓW OGŁOSZEŃ + KOPIOWANIE DO SCHOWKA
+        // -------------------------------------------------------------------
+        document.getElementById("generateDescBtn").addEventListener("click", () => {
+            const title = document.getElementById("genTitle").value.trim() || "Oryginalny Produkt Premium";
+            const condition = document.getElementById("genCondition").value;
+            const perk = document.getElementById("genPerk").value;
+
+            const template = `🔥 NA SPRZEDAŻ: ${title.toUpperCase()} 🔥\n\n` +
+                `✅ Stan: ${condition}\n` +
+                `✅ Oryginalność: 100% autentyczny produkt (możliwość weryfikacji)\n` +
+                `✅ Atut: ${perk}\n\n` +
+                `📦 Bezpieczne, pancerne pakowanie na czas transportu – kupujesz bez stresu!\n` +
+                `⚡ Szybka realizacja zamówienia (InPost / Orlen Paczka / DPD).\n\n` +
+                `💬 Masz pytania lub chcesz dodatkowe zdjęcia? Napisz wiadomość prywatną – odpowiadam błyskawicznie!\n\n` +
+                `#resell #streetwear #okazja #oryginalne #vintedpolska #premium #limitowane`;
+
+            document.getElementById("generatedOutput").value = template;
+            showToast("Wygenerowano profesjonalny opis ogłoszenia!", "success");
+        });
+
+        document.getElementById("copyDescBtn").addEventListener("click", () => {
+            const output = document.getElementById("generatedOutput");
+            if (!output.value.trim()) {
+                showToast("Najpierw kliknij 'Wygeneruj Profesjonalny Opis'.", "info");
+                return;
+            }
+            output.select();
+            output.setSelectionRange(0, 99999);
+            try {
+                document.execCommand("copy");
+                showToast("Skopiowano opis ogłoszenia do schowka!", "success");
+            } catch (err) {
+                showToast("Zaznacz tekst i skopiuj ręcznie (Ctrl+C).", "info");
+            }
+        });
+
+        // -------------------------------------------------------------------
+        // 8. TRACKER MAGAZYNU RESELLERA (LOCALSTORAGE)
+        // -------------------------------------------------------------------
+        const STORAGE_KEY = "resell_vault_inventory_v1";
+        let inventory = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [
+            { id: 101, name: "Lattafa Khamrah 100ml EDP", buy: 105, sell: 175, status: "Sprzedane" },
+            { id: 102, name: "Nike Dunk Low Panda (42.5)", buy: 420, sell: 570, status: "Na sprzedaż" }
+        ];
+
+        function saveInventory() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(inventory));
+            renderInventory();
+        }
+
+        function renderInventory() {
+            const tbody = document.getElementById("inventoryTableBody");
+            let totalInvested = 0;
+            let realizedProfit = 0;
+
+            inventory.forEach(item => {
+                totalInvested += Number(item.buy);
+                if (item.status === "Sprzedane") {
+                    realizedProfit += (Number(item.sell) - Number(item.buy));
+                }
+            });
+
+            document.getElementById("invInvested").textContent = `${totalInvested} zł`;
+            document.getElementById("invRealizedProfit").textContent = `${realizedProfit >= 0 ? "+" : ""}${realizedProfit} zł`;
+
+            if (inventory.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-6 text-center text-zinc-500 text-xs">Twój magazyn jest pusty. Dodaj swój pierwszy zakup powyżej!</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = inventory.map(item => {
+                const profit = item.sell - item.buy;
+                const statusBadge = item.status === "Sprzedane"
+                    ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30"
+                    : item.status === "Na sprzedaż"
+                    ? "bg-violet-500/15 text-violet-300 border-violet-500/30"
+                    : "bg-amber-500/15 text-amber-300 border-amber-500/30";
+
+                return `
+                    <tr class="hover:bg-white/[0.02] transition-colors">
+                        <td class="py-3 px-3 font-semibold text-white">${item.name}</td>
+                        <td class="py-3 px-3 font-mono text-zinc-400">${item.buy} zł</td>
+                        <td class="py-3 px-3 font-mono text-white">${item.sell} zł</td>
+                        <td class="py-3 px-3 font-mono font-bold ${profit >= 0 ? 'text-emerald-400' : 'text-rose-400'}">
+                            ${profit >= 0 ? '+' : ''}${profit} zł
+                        </td>
+                        <td class="py-3 px-3">
+                            <button onclick="toggleItemStatus(${item.id})" class="px-2.5 py-1 rounded-lg text-xs font-semibold border ${statusBadge} cursor-pointer" title="Kliknij, aby zmienić status">
+                                ${item.status}
+                            </button>
+                        </td>
+                        <td class="py-3 px-3 text-right">
+                            <button onclick="deleteInventoryItem(${item.id})" class="text-zinc-500 hover:text-rose-400 transition-colors p-1.5 cursor-pointer" title="Usuń">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            }).join("");
+        }
+
+        document.getElementById("inventoryForm").addEventListener("submit", (e) => {
+            e.preventDefault();
+            const name = document.getElementById("invName").value.trim();
+            const buy = parseFloat(document.getElementById("invBuy").value);
+            const sell = parseFloat(document.getElementById("invSell").value);
+            const status = document.getElementById("invStatus").value;
+
+            if (!name || isNaN(buy) || isNaN(sell)) return;
+
+            inventory.unshift({
+                id: Date.now(),
+                name,
+                buy,
+                sell,
+                status
+            });
+
+            e.target.reset();
+            saveInventory();
+            showToast("Dodano przedmiot do Twojego magazynu!", "success");
+        });
+
+        window.toggleItemStatus = function(id) {
+            const statuses = ["W drodze", "Na sprzedaż", "Sprzedane"];
+            const item = inventory.find(i => i.id === id);
+            if (!item) return;
+            const nextIdx = (statuses.indexOf(item.status) + 1) % statuses.length;
+            item.status = statuses[nextIdx];
+            saveInventory();
+        };
+
+        window.deleteInventoryItem = function(id) {
+            inventory = inventory.filter(i => i.id !== id);
+            saveInventory();
+            showToast("Usunięto pozycję z magazynu.", "info");
+        };
+
+        // -------------------------------------------------------------------
+        // INICJALIZACJA APLIKACJI
+        // -------------------------------------------------------------------
+        updateGlobalStats();
+        applyFiltersAndRender(true);
+        calculateProfit();
+        renderInventory();
+    </script>
+</body>
+</html>
